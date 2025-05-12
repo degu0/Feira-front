@@ -1,12 +1,39 @@
 import { Route, Routes } from "react-router-dom";
-import { Home } from "../pages/Home";
 import { Login } from "../pages/Login";
+import { PrivateRoute } from "./PrivateRoute";
+import { HomeWrapper } from "../wrappers/HomeWrapper";
+import { LojistaRoutes } from "./LojistaRoutes";
+import { ClienteRoutes } from "./ClienteRoutes";
 
 export function AppRouter() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/unauthorized" element={<h1>Acesso negado</h1>} />
+      <Route
+        path="/"
+        element={
+          <PrivateRoute>
+            <HomeWrapper />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/lojista"
+        element={
+          <PrivateRoute roles={["lojista"]}>
+            <LojistaRoutes />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/cliente"
+        element={
+          <PrivateRoute roles={["cliente"]}>
+            <ClienteRoutes />
+          </PrivateRoute>
+        }
+      />
     </Routes>
   );
 }
