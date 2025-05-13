@@ -4,12 +4,17 @@ import { PrivateRoute } from "./PrivateRoute";
 import { HomeWrapper } from "../wrappers/HomeWrapper";
 import { LojistaRoutes } from "./LojistaRoutes";
 import { ClienteRoutes } from "./ClienteRoutes";
+import { Profile } from "../pages/Profile";
+import { Product } from "../pages/Product";
 
 export function AppRouter() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/unauthorized" element={<h1>Acesso negado</h1>} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/product/:id" element={<Product />} />
+
       <Route
         path="/"
         element={

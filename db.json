@@ -743,5 +743,42 @@
       "ativo": true,
       "cor": "roxo"
     }
-  ]
+  ],
+  "clientes": [
+    {
+      "id": 1,
+      "nome": "Ana Silva",
+      "email": "ana.silva@email.com",
+      "telefone": "(81) 91234-5678",
+      "tipo": "Comerciante"
+    },
+    {
+      "id": 2,
+      "nome": "Carlos Mendes",
+      "email": "carlos.mendes@email.com",
+      "telefone": "(81) 99876-5432",
+      "tipo": "Local"
+    },
+    {
+      "id": 3,
+      "nome": "Julia Costa",
+      "email": "julia.costa@email.com",
+      "telefone": "(11) 97777-1234",
+      "tipo": "Turista"
+    },
+    {
+      "id": 4,
+      "nome": "Marcos Oliveira",
+      "email": "marcos.oliveira@email.com",
+      "telefone": "(81) 93456-7890",
+      "tipo": "Comerciante"
+    },
+    {
+      "id": 5,
+      "nome": "Beatriz Souza",
+      "email": "beatriz.souza@email.com",
+      "telefone": "(21) 96543-2109",
+      "tipo": "Turista"
+    }
+  ]  
 }
