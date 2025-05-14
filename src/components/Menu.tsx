@@ -1,14 +1,22 @@
-import { Link } from "react-router-dom"
+import { FaRegHeart } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export const Menu = () => {
-    return (
-<nav className="fixed bottom-0 left-0 w-full bg-white border-t shadow-md flex justify-around items-center h-16 z-50">
-      <Link to="/" className="flex flex-col items-center text-gray-700 hover:text-blue-500">
+  return (
+    <nav className="fixed bottom-0 left-0 w-full bg-white border-t shadow-md flex justify-around items-center h-16 z-50">
+      <Link
+        to="/"
+        className="flex flex-col items-center text-gray-700 hover:text-blue-500"
+      >
+        <FaRegHeart className="text-amber-600" />
         <span className="text-xs">Home</span>
       </Link>
-      <Link to="/profile" className="flex flex-col items-center text-gray-700 hover:text-blue-500">
+      <Link
+        to="/profile"
+        className="flex flex-col items-center text-gray-700 hover:text-blue-500"
+      >
         <span className="text-xs">Perfil</span>
       </Link>
     </nav>
-    )
-}
+  );
+};
