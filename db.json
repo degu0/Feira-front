@@ -549,7 +549,13 @@
       "banner": null,
       "logo": null,
       "descricao": "Loja especializada em moda masculina",
-      "produtos": [1, 2, 3, 4, 5],
+      "produtos": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
       "categoria": 9,
       "localizacao": "Rua 10 de maio, 293",
       "lojista": 1,
@@ -569,7 +575,13 @@
       "banner": null,
       "logo": null,
       "descricao": "Loja especializada em roupas e acessórios esportivos",
-      "produtos": [6, 7, 8, 9, 10],
+      "produtos": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
       "categoria": 8,
       "localizacao": "Av. Central, 45",
       "lojista": 2,
@@ -589,7 +601,13 @@
       "banner": null,
       "logo": null,
       "descricao": "Outlet de roupas e calçados Nike",
-      "produtos": [11, 12, 13, 14, 15],
+      "produtos": [
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
       "categoria": 8,
       "localizacao": "Rua das Palmeiras, 118",
       "lojista": 3,
@@ -609,7 +627,13 @@
       "banner": null,
       "logo": null,
       "descricao": "Moda feminina e masculina de alta qualidade",
-      "produtos": [16, 17, 18, 19, 20],
+      "produtos": [
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
       "categoria": 7,
       "localizacao": "Rua João Pessoa, 214",
       "lojista": 4,
@@ -629,7 +653,13 @@
       "banner": null,
       "logo": null,
       "descricao": "Moda jovem e trendy",
-      "produtos": [1, 3, 5, 7, 9],
+      "produtos": [
+        1,
+        3,
+        5,
+        7,
+        9
+      ],
       "categoria": 7,
       "localizacao": "Av. do Shopping, 122",
       "lojista": 5,
@@ -649,7 +679,13 @@
       "banner": null,
       "logo": null,
       "descricao": "Vestuário para todas as idades",
-      "produtos": [2, 4, 6, 8, 10],
+      "produtos": [
+        2,
+        4,
+        6,
+        8,
+        10
+      ],
       "categoria": 7,
       "localizacao": "Rua São Vicente, 187",
       "lojista": 6,
@@ -669,7 +705,13 @@
       "banner": null,
       "logo": null,
       "descricao": "Moda casual e elegante",
-      "produtos": [11, 13, 15, 17, 19],
+      "produtos": [
+        11,
+        13,
+        15,
+        17,
+        19
+      ],
       "categoria": 9,
       "localizacao": "Rua das Flores, 399",
       "lojista": 7,
@@ -689,7 +731,13 @@
       "banner": null,
       "logo": null,
       "descricao": "Loja de moda jovem e sofisticada",
-      "produtos": [12, 14, 16, 18, 20],
+      "produtos": [
+        12,
+        14,
+        16,
+        18,
+        20
+      ],
       "categoria": 7,
       "localizacao": "Av. Central, 352",
       "lojista": 8,
@@ -709,7 +757,13 @@
       "banner": null,
       "logo": null,
       "descricao": "Estilo e sofisticação brasileira",
-      "produtos": [1, 5, 9, 13, 17],
+      "produtos": [
+        1,
+        5,
+        9,
+        13,
+        17
+      ],
       "categoria": 9,
       "localizacao": "Rua do Comércio, 113",
       "lojista": 9,
@@ -729,7 +783,13 @@
       "banner": null,
       "logo": null,
       "descricao": "Vestuário e acessórios de alta qualidade",
-      "produtos": [2, 6, 10, 14, 18],
+      "produtos": [
+        2,
+        6,
+        10,
+        14,
+        18
+      ],
       "categoria": 7,
       "localizacao": "Rua Dona Teresa, 156",
       "lojista": 10,
@@ -780,5 +840,88 @@
       "telefone": "(21) 96543-2109",
       "tipo": "Turista"
     }
-  ]  
+  ],
+  "user": [
+    {
+      "id": "628",
+      "nome": "t",
+      "email": "8787@gmail.com",
+      "dataNascimento": "2025-05-14",
+      "tipoUsuario": "Local",
+      "genero": "Feminino",
+      "password": "12"
+    },
+    {
+      "id": "6961",
+      "nome": "test",
+      "tipoUsuario": "Turista",
+      "genero": "Feminino",
+      "idade": 12,
+      "email": "test@gmail.com",
+      "senha": "123123"
+    },
+    {
+      "id": "9895",
+      "nome": "tesq1",
+      "tipoUsuario": "Turista",
+      "genero": "Outro",
+      "idade": 123123,
+      "email": "123@gmail.com",
+      "senha": "123123123"
+    },
+    {
+      "id": "2793",
+      "nome": "test",
+      "tipoUsuario": "1",
+      "genero": "1",
+      "data_nascimento": "2025-05-15",
+      "email": "123@gmail.com",
+      "senha": "123123"
+    },
+    {
+      "id": "1488",
+      "nome": "Cliente",
+      "tipoUsuario": "Local",
+      "genero": "Masculino",
+      "data_nascimento": "2025-05-14",
+      "email": "cliente@email.com",
+      "senha": "123123"
+    }
+  ],
+  "user-categories": [
+    {
+      "id": "9f78",
+      "userId": "9895",
+      "categoryIds": [
+        "7",
+        "9",
+        "11",
+        "14"
+      ]
+    },
+    {
+      "id": "ebf1",
+      "userId": "2793",
+      "categoryIds": [
+        "4",
+        "3",
+        "2",
+        "6",
+        "11"
+      ]
+    },
+    {
+      "id": "41be",
+      "userId": "1488",
+      "categoryIds": [
+        "1",
+        "5",
+        "9",
+        "15",
+        "2",
+        "8",
+        "16"
+      ]
+    }
+  ]
 }

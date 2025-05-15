@@ -4,6 +4,7 @@ import { Menu } from "../../components/Menu";
 import map from "../../../public/map.png";
 import { Link } from "react-router-dom";
 import { SearchInput } from "../../components/SearchInput";
+import { SideBar } from "../../components/SideBar";
 
 type ProductType = {
   id: string;
@@ -54,16 +55,14 @@ export function HomeCliente() {
         style={{ backgroundImage: `url(${map})` }}
       >
         <div
-          className={`fixed w-full h-32 z-50 
-        flex justify-between pt-3 ${
-          scrolled ? "bg-white shadow" : "bg-transparent"
-        }`}
+          className={`fixed w-full h-28 z-50 
+            flex justify-between pt-3 ${
+              scrolled ? "bg-white shadow" : "bg-transparent"
+            }`}
         >
+          <SideBar />
           <Link to="/search" className="w-[80%]">
             <SearchInput />
-          </Link>
-          <Link to="/profile" className="px-4 pt-5">
-            <div className="p-5 rounded-full bg-amber-600" />
           </Link>
         </div>
       </div>

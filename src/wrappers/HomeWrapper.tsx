@@ -8,7 +8,9 @@ export const HomeWrapper = () => {
   const { user } = useContext(AuthContext);
 
   if (!user) return <Navigate to="/login" />;
-  if (user.type === "cliente") return <HomeCliente />;
+  if (["Turista", "Local"].includes(user.type)) {
+    return <HomeCliente />;
+  }  
   if (user.type === "lojista") return <HomeLojista />;
 
   return <Navigate to="/unauthorized" />;
