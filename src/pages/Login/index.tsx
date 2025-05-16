@@ -1,11 +1,12 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContextProvider";
+import logo from "../../../public/logo.png";
 
 type UserType = {
   email: string;
   tipoUsuario: string;
-} 
+};
 
 export function Login() {
   const navigate = useNavigate();
@@ -18,36 +19,36 @@ export function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setErro("");
-  
+
     try {
       const res = await fetch(
         `http://localhost:3000/user?email=${email}&senha=${password}`
       );
-  
+
       const data: UserType[] = await res.json();
-  
+
       if (res.ok && data.length > 0) {
         const apiUser = data[0];
         const user = {
           email: apiUser.email,
           type: apiUser.tipoUsuario,
         };
-      
+
         localStorage.setItem("user", JSON.stringify(user));
         setUser(user);
         navigate("/");
-      }
-      else {
+      } else {
         setErro("Email ou senha incorretos.");
       }
     } catch (error) {
       console.log("Erro no login:", error);
       setErro("Erro ao tentar fazer login.");
     }
-  };  
+  };
 
   return (
     <div className="h-screen w-screen flex justify-center items-center">
+      <img src={logo} alt="Logo do aplicativo" />
       <form
         onSubmit={handleLogin}
         className="flex flex-col items-center gap-5 border-2 rounded-2xl p-10"
