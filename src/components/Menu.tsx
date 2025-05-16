@@ -12,6 +12,12 @@ export const Menu = () => {
         <span className="text-xs">Home</span>
       </Link>
       <Link
+        to="/category"
+        className="flex flex-col items-center text-gray-700 hover:text-blue-500"
+      >
+        <span className="text-xs">Categoria</span>
+      </Link>
+      <Link
         to="/profile"
         className="flex flex-col items-center text-gray-700 hover:text-blue-500"
       >

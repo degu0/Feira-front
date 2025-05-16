@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import { CardProduct } from "../../components/CardProduct";
 import { Menu } from "../../components/Menu";
 import map from "../../../public/map.png";
-import { Link } from "react-router-dom";
 import { SearchInput } from "../../components/SearchInput";
-import { SideBar } from "../../components/SideBar";
 
 type ProductType = {
   id: string;
@@ -56,14 +54,11 @@ export function HomeCliente() {
       >
         <div
           className={`fixed w-full h-28 z-50 
-            flex justify-between pt-3 ${
+            flex justify-center pt-3 ${
               scrolled ? "bg-white shadow" : "bg-transparent"
             }`}
         >
-          <SideBar />
-          <Link to="/search" className="w-[80%]">
-            <SearchInput />
-          </Link>
+          <SearchInput />
         </div>
       </div>
 

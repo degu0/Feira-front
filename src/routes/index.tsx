@@ -6,11 +6,13 @@ import { LojistaRoutes } from "./LojistaRoutes";
 import { ClienteRoutes } from "./ClienteRoutes";
 import { Profile } from "../pages/Profile";
 import { Product } from "../pages/Product";
-import { Search } from "../pages/Search";
 import { SearchResults } from "../pages/SearchResults";
 import { CadastroLogin } from "../pages/RegisterLogin";
 import { CategoryPreferences } from "../pages/CategoryPreferences";
 import { Unauthorized } from "../pages/Unauthorized";
+import { Category } from "../pages/Category";
+import { ExploreCategory } from "../pages/Category/ExploreCategory";
+import { Store } from "../pages/Store";
 
 export function AppRouter() {
   return (
@@ -21,7 +23,9 @@ export function AppRouter() {
       <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/product/:id" element={<Product />} />
-      <Route path="/search" element={<Search />} />
+      <Route path="/store/:id" element={<Store />} />
+      <Route path="/category" element={<Category />} />
+      <Route path="/category/:category" element={<ExploreCategory />} />
       <Route path="/search/:searchTerm" element={<SearchResults />} />
 
       <Route

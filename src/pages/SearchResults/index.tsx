@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CardProduct } from "../../components/CardProduct";
 import { SearchInput } from "../../components/SearchInput";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 type ProductType = {
   id: string;
@@ -10,6 +11,7 @@ type ProductType = {
 };
 
 export function SearchResults() {
+  const navigate = useNavigate();
   const { searchTerm } = useParams<{ searchTerm: string }>();
   const [products, setProducts] = useState<ProductType[]>([]);
   const query = searchTerm || "";
@@ -38,10 +40,11 @@ export function SearchResults() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <header className="p-4">
-        <Link to="/search">
-          <SearchInput />
-        </Link>
+      <header className="p-4 flex justify-center items-center">
+        <div className="px-4 pt-4 cursor-pointer" onClick={() => navigate("/")}>
+          <FaArrowLeftLong className="text-2xl" />
+        </div>
+        <SearchInput />
       </header>
 
       <main className="flex-1 overflow-y-auto px-8 pb-4">
