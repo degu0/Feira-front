@@ -4,6 +4,7 @@ import { AuthContext } from "../../context/AuthContextProvider";
 import logo from "../../../public/logo.png";
 
 type UserType = {
+  id: string;
   email: string;
   tipoUsuario: string;
 };
@@ -30,6 +31,7 @@ export function Login() {
       if (res.ok && data.length > 0) {
         const apiUser = data[0];
         const user = {
+          id: apiUser.id,
           email: apiUser.email,
           type: apiUser.tipoUsuario,
         };

@@ -5,7 +5,7 @@ import { FaRegHeart, FaStar } from "react-icons/fa";
 type CardProductProps = {
   id: string;
   nome: string;
-  categoria: number;
+  categoria?: number;
 };
 
 export const CardProduct: React.FC<CardProductProps> = ({
