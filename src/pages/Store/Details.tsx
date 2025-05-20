@@ -45,15 +45,15 @@ export function Details() {
   }, [id]);
 
   return (
-    <div className="h-full">
+    <div className="p-4 bg-white min-h-screen">
       <div className="h-full">
-        <div className="w-full flex items-center justify-start gap-10 mt-3">
+        <header className="flex items-center gap-2 mb-4">
           <FaArrowLeft
             onClick={() => navigate(-1)}
-            className="text-xl ml-5 text-amber-600"
+            className="text-xl ml-5 text-orange-700"
           />
-          <h2 className="text-amber-600 font-semibold">Detelhes da loja</h2>
-        </div>
+          <h2 className="text-lg font-semibold text-orange-700">Detelhes da loja</h2>
+        </header>
         <div className="my-15 flex">
           <ul className="w-full m-4 space-y-2">
             <p className="text-xl font-bold flex items-center gap-5">

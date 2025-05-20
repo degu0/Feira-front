@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { CustomSelect } from "../../components/CustomSelect";
 import { useEffect } from "react";
+import logo from "../../../public/logo.png";
 
 const FormSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
@@ -72,24 +73,23 @@ export function CadastroLogin() {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col justify-center items-center">
-      <h1 className="text-2xl font-bold mb-4">Cadastro de Usuário</h1>
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-6 bg-white">
+      <img src={logo} alt="Logo do aplicativo" className="w-24 mb-6" />
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col items-center gap-5 border-2 rounded-2xl p-10"
       >
         <div className="flex flex-col gap-1">
           <label>Nome:</label>
-          <input {...register("nome")} className="p-2 border rounded" />
+          <input {...register("nome")} className="w-full mb-3 p-3 border border-orange-500 rounded-md" />
           {errors.nome && <p className="text-red-500">{errors.nome.message}</p>}
         </div>
         <div className="flex flex-col gap-1">
           <label>Data de nascimento:</label>
-          <input type="date" {...register("data_nascimento")} className="p-2 border rounded" />
+          <input type="date" {...register("data_nascimento")} className="w-full mb-3 p-3 border border-orange-500 rounded-md" />
           {errors.data_nascimento && <p className="text-red-500">{errors.data_nascimento.message}</p>}
         </div>
         <div className="flex flex-col gap-1">
-          <label>Tipo de Usuário:</label>
+          <label className="block mb-1 text-gray-700">Tipo de Usuário:</label>
           <CustomSelect
             type="radio"
             values={typeOfPublic}
@@ -104,7 +104,7 @@ export function CadastroLogin() {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label>Gênero:</label>
+          <label className="block mb-1 text-gray-700">Gênero:</label>
           <CustomSelect
             type="radio"
             values={genders}
@@ -120,17 +120,17 @@ export function CadastroLogin() {
 
         <div className="flex flex-col gap-1">
           <label>Email:</label>
-          <input type="email" {...register("email")} className="p-2 border rounded" />
+          <input type="email" {...register("email")} className="w-full mb-3 p-3 border border-orange-500 rounded-md" />
           {errors.email && <p className="text-red-500">{errors.email.message}</p>}
         </div>
 
         <div className="flex flex-col gap-1">
           <label>Senha:</label>
-          <input type="password" {...register("senha")} className="p-2 border rounded" />
+          <input type="password" {...register("senha")} className="w-full mb-3 p-3 border border-orange-500 rounded-md" />
           {errors.senha && <p className="text-red-500">{errors.senha.message}</p>}
         </div>
 
-        <button type="submit" className="p-2 bg-blue-600 text-white rounded">
+        <button type="submit" className="bg-orange-500 text-white w-full py-3 rounded-full">
           Cadastrar
         </button>
       </form>

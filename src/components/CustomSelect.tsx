@@ -36,16 +36,18 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
 
   const getColorClass = (index: number) => {
     return index % 2 === 0
-      ? "bg-amber-400 hover:bg-amber-500 peer-checked:bg-amber-600"
-      : "bg-amber-700 hover:bg-amber-800 peer-checked:bg-amber-900";
+      ? "bg-orange-500 hover:bg-orange-600 peer-checked:bg-orange-700"
+      : "bg-yellow-400 hover:bg-yellow-500 peer-checked:bg-yellow-600";
   };
 
   return (
-    <div className="w-full my-2">
-      <h2 className="ml-1 mb-2 text-sm text-center font-semibold text-gray-700">
-        {title}
-      </h2>
-      <div className="flex flex-wrap justify-center gap-2">
+    <div className="w-full my-4">
+      {title && (
+        <h2 className="text-center text-gray-700 font-semibold text-lg mb-4">
+          {title}
+        </h2>
+      )}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {values.map((value, index) => {
           const id = `${name}-${index}`;
           const isChecked =
@@ -54,7 +56,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
               : selectedSingle?.id === value.id;
 
           return (
-            <div key={index} className="w-auto min-w-[140px]">
+            <div key={index} className="min-w-[120px]">
               <input
                 type={type}
                 id={id}
@@ -66,11 +68,8 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
               />
               <label
                 htmlFor={id}
-                className={`flex items-center justify-center text-center w-full 
-                py-2 px-4 text-base font-medium text-white rounded-md cursor-pointer transition-colors
-            ${getColorClass(
-              index
-            )} peer-checked:ring-2 peer-checked:ring-white peer-checked:text-white`}
+                className={`block text-center py-2 px-3 text-sm font-medium text-white rounded-lg cursor-pointer transition
+                ${getColorClass(index)} peer-checked:ring-2 peer-checked:ring-white`}
               >
                 {value.nome}
               </label>

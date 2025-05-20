@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { CustomSelect } from "../../components/CustomSelect";
+import logo from "../../../public/logo.png";
 
 type CategoryType = {
   id: string;
@@ -8,17 +9,15 @@ type CategoryType = {
 };
 
 type Option = {
-    id: string;
-    nome: string;
-  };  
+  id: string;
+  nome: string;
+};
 
 export function CategoryPreferences() {
   const { id: userId } = useParams();
   const navigate = useNavigate();
 
-  const [selectedCategories, setSelectedCategories] = useState<CategoryType[]>(
-    []
-  );
+  const [selectedCategories, setSelectedCategories] = useState<CategoryType[]>([]);
   const [categories, setCategories] = useState<CategoryType[]>([]);
 
   useEffect(() => {
@@ -26,7 +25,6 @@ export function CategoryPreferences() {
       try {
         const response = await fetch("http://localhost:3000/categoria");
         const data: CategoryType[] = await response.json();
-
         if (response.ok && Array.isArray(data)) {
           setCategories(data);
         } else {
@@ -70,8 +68,10 @@ export function CategoryPreferences() {
   };
 
   return (
-    <div className="h-full p-6 flex flex-col justify-center gap-10">
-      <div className="grid gap-4">
+    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-10 bg-gradient-to-b from-orange-100 to-white">
+      <img src={logo} alt="Logo do aplicativo" className="w-24 mb-8" />
+
+      <div className="w-full max-w-md">
         <CustomSelect
           type="checkbox"
           title="Selecione suas categorias preferidas"
@@ -79,8 +79,7 @@ export function CategoryPreferences() {
           name="category"
           onChange={(selected) => {
             if (Array.isArray(selected)) {
-              const selectedOptions = selected as Option[];
-              setSelectedCategories(selectedOptions);
+              setSelectedCategories(selected as Option[]);
             } else if (selected) {
               setSelectedCategories([selected as Option]);
             } else {
@@ -88,14 +87,13 @@ export function CategoryPreferences() {
             }
           }}
         />
+        <button
+          className="bg-orange-600 hover:bg-orange-700 text-white text-lg font-semibold py-3 rounded-full w-full mt-6 shadow-md transition duration-300"
+          onClick={handleRegisterCategoryOfUser}
+        >
+          Gerar minhas recomendações
+        </button>
       </div>
-
-      <button
-        className="mt-6 bg-amber-600 text-white py-2 px-4 rounded"
-        onClick={handleRegisterCategoryOfUser}
-      >
-        Salvar Preferências
-      </button>
     </div>
   );
 }

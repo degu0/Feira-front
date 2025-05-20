@@ -49,12 +49,9 @@ export function Login() {
   };
 
   return (
-    <div className="h-screen w-screen flex justify-center items-center">
-      <img src={logo} alt="Logo do aplicativo" />
-      <form
-        onSubmit={handleLogin}
-        className="flex flex-col items-center gap-5 border-2 rounded-2xl p-10"
-      >
+    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-6 bg-white">
+      <img src={logo} alt="Logo do aplicativo" className="w-24 mb-6" />
+      <form onSubmit={handleLogin}>
         <div className="flex flex-col gap-2">
           <label htmlFor="email">Email:</label>
           <input
@@ -62,7 +59,7 @@ export function Login() {
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="p-2 border-black border-1 rounded"
+            className="w-full mb-3 p-3 border border-orange-500 rounded-md"
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -72,19 +69,25 @@ export function Login() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="p-2 border-black border-1 rounded"
+            className="w-full mb-3 p-3 border border-orange-500 rounded-md"
           />
         </div>
 
         {erro && <p className="text-red-500">{erro}</p>}
 
-        <Link to="/register" className="text-blue-600 underline">
-          Não possui conta?
-        </Link>
-
-        <button type="submit" className="p-2 bg-amber-700 rounded text-white">
-          Entrar
+        <button
+          type="submit"
+          className="bg-orange-500 text-white w-full py-3 rounded-full mb-2"
+        >
+          Faça login
         </button>
+
+        <p className="text-sm">
+          Ainda não possui uma conta?{" "}
+          <Link to="/register" className="font-bold">
+            Cadastre-se
+          </Link>
+        </p>
       </form>
     </div>
   );
