@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import jeans from "../../public/Jeans.jpg";
-import { FaRegHeart, FaStar } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
 
 type CardProductProps = {
   id: string;
@@ -11,27 +11,32 @@ type CardProductProps = {
 export const CardProduct: React.FC<CardProductProps> = ({
   id,
   nome,
-  categoria,
+  categoria
 }) => {
   return (
     <NavLink
       to={`/product/${id}`}
-      className="w-36 border-1 border-gray-400 rounded-lg"
+      className="w-44 h-64 relative block"
     >
-      <div className="w-full h-30 bg-center bg-cover bg-no-repeat relative" style={{ backgroundImage: `url(${jeans})` }}>
-        <FaRegHeart className="absolute top-2 right-2" />
+      <img
+        src={jeans}
+        alt={nome}
+        className="w-44 h-44 absolute top-0 left-0 rounded-tl-[5px] rounded-tr-[5px] object-cover"
+      />
+
+      <div className="w-44 h-64 absolute top-0 left-0 rounded-[5px] border border-amber-600/25 pointer-events-none" />
+
+
+      <div className="absolute top-[178px] left-3 text-zinc-800 text-base font-semibold leading-6">
+        {nome}
       </div>
-      <div className="p-3">
-        <ul className="flex flex-col gap-2">
-          <li className="text-md font-semibold">{nome}</li>
-          <div className="text-sm">
-            <li className="text-gray-600">{categoria}</li>
-            <li className="font-semibold flex items-center gap-1">
-              <FaStar className="text-amber-500" />
-              {categoria}
-            </li>
-          </div>
-        </ul>
+
+      <div className="absolute top-[210px] left-3 text-gray-600 text-sm font-semibold leading-6">
+        {categoria}
+      </div>
+
+      <div className="w-6 h-6 absolute top-2 right-2 overflow-hidden">
+          <FaRegHeart className="text-amber-600 text-sm" />
       </div>
     </NavLink>
   );

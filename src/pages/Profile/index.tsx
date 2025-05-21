@@ -2,6 +2,11 @@ import { Menu } from "../../components/Menu";
 import profile from "../../../public/profile.png";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { GoPeople } from "react-icons/go";
+import { CiCalendar, CiLocationOn } from "react-icons/ci";
+import { MdOutlineMailOutline } from "react-icons/md";
+import { FiPhone } from "react-icons/fi";
+import { FaHeart } from "react-icons/fa";
 
 type UserType = {
   id: string;
@@ -21,7 +26,7 @@ export function Profile() {
     email: "",
     telefone: "",
     tipoUsuario: "",
-    data_nascimento: ""
+    data_nascimento: "",
   });
   const storedUserJSON = localStorage.getItem("user");
 
@@ -50,25 +55,25 @@ export function Profile() {
   function calcularIdade(dataNascimento: string): number {
     const hoje = new Date();
     const nascimento = new Date(dataNascimento);
-  
+
     let idade = hoje.getFullYear() - nascimento.getFullYear();
-  
+
     const mesAtual = hoje.getMonth();
     const diaAtual = hoje.getDate();
     const mesNascimento = nascimento.getMonth();
     const diaNascimento = nascimento.getDate();
-  
+
     if (
       mesAtual < mesNascimento ||
       (mesAtual === mesNascimento && diaAtual < diaNascimento)
     ) {
       idade--;
     }
-  
+
     return idade;
   }
 
-  console.log(calcularIdade("2025-05-14"))
+  console.log(calcularIdade("2025-05-14"));
 
   return (
     <div>
@@ -84,28 +89,33 @@ export function Profile() {
         <div>
           <ul>
             <li className="flex items-center justify-evenly">
+              <GoPeople className="text-amber-600" />
               <p>Tipo de usuario</p> <p>{user.tipoUsuario}</p>
             </li>
             <li className="flex items-center justify-evenly">
               <p>Genero</p> <p>{user.genero}</p>
             </li>
             <li className="flex items-center justify-evenly">
+              <CiCalendar className="text-amber-600" />
               <p>Idade</p> <p>{calcularIdade(user.data_nascimento)}</p>
             </li>
             <li className="flex items-center justify-evenly">
+              <CiLocationOn className="text-amber-600" />
               <p>Endereço</p> <p>Caruaru</p>
             </li>
             <li className="flex items-center justify-evenly">
+              <MdOutlineMailOutline className="text-amber-600" />
               <p>Email</p> <p>{user.email}</p>
             </li>
             <li className="flex items-center justify-evenly">
+              <FiPhone className="text-amber-600" />
               <p>Telefone</p> <p>{user.telefone}</p>
             </li>
           </ul>
         </div>
-        <div>
+        <div className="w-full flex items-center gap-5">
+          <FaHeart className="text-amber-600" />
           <Link to="/wishlist" className="text-blue-600 underline">
-            {" "}
             Favoritos
           </Link>
         </div>

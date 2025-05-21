@@ -14,6 +14,7 @@ import { Category } from "../pages/Category";
 import { ExploreCategory } from "../pages/Category/ExploreCategory";
 import { Store } from "../pages/Store";
 import { Details } from "../pages/Store/Details";
+import { Wishlist } from "../pages/Wishlist";
 
 export function AppRouter() {
   return (
@@ -29,6 +30,7 @@ export function AppRouter() {
       <Route path="/category" element={<Category />} />
       <Route path="/category/:category" element={<ExploreCategory />} />
       <Route path="/search/:searchTerm" element={<SearchResults />} />
+      <Route path="/wishlist" element={<Wishlist />} />
 
       <Route
         path="/"

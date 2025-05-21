@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Menu } from "../../components/Menu";
-import { FaArrowLeft, FaStar } from "react-icons/fa";
+import { FaArrowLeft} from "react-icons/fa";
 import loja from "../../../public/loja.jpg";
 
 type StoreType = {
