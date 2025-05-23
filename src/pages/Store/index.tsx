@@ -3,9 +3,10 @@ import { Menu } from "../../components/Menu";
 import banner from "../../../public/banner.jpg";
 import loja from "../../../public/loja.jpg";
 import { useNavigate, useParams } from "react-router-dom";
-import { FaArrowLeft, FaStar } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import { CardProduct } from "../../components/CardProduct";
+import { Header } from "../../components/Header";
 
 type StoreType = {
   id: string;
@@ -21,6 +22,7 @@ type StoreType = {
 type ProductType = {
   id: string;
   nome: string;
+  imagem: string
 };
 
 type CategoryNameType = {
@@ -49,7 +51,7 @@ export function Store() {
     async function fetchStoreProductAndCategoryName() {
       try {
         const responseStore = await fetch(
-          `http://localhost:3000/lojas?id=${id}`
+          `http://localhost:3001/lojas?id=${id}`
         );
         if (!responseStore.ok) throw new Error(`Erro ao buscar loja`);
         const dataStore: StoreType[] = await responseStore.json();
@@ -59,7 +61,7 @@ export function Store() {
         const produtosEncontrados = await Promise.all(
           lojaEncontrada.produtos.map(async (idProduct) => {
             const response = await fetch(
-              `http://localhost:3000/produtos?id=${idProduct}`
+              `http://localhost:3001/produtos?id=${idProduct}`
             );
             if (!response.ok) throw new Error(`Erro ao buscar produto`);
             const data: ProductType[] = await response.json();
@@ -69,7 +71,7 @@ export function Store() {
         setProducts(produtosEncontrados);
 
         const responseCategory = await fetch(
-          `http://localhost:3000/categoria?id=${lojaEncontrada.categoria}`
+          `http://localhost:3001/categoria?id=${lojaEncontrada.categoria}`
         );
         if (!responseCategory.ok) throw new Error(`Erro ao buscar categoria`);
         const dataCategoryName: CategoryNameType[] =
@@ -86,9 +88,7 @@ export function Store() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <div className="relative h-48 w-full bg-cover bg-center" style={{ backgroundImage: `url(${banner})` }}>
-        <button onClick={() => navigate(-1)} className="absolute top-4 left-4 p-2 bg-white rounded shadow-lg">
-          <FaArrowLeft className="text-xl text-orange-600" />
-        </button>
+        <Header />
         <img
           src={loja}
           alt="Imagem da loja"
@@ -122,7 +122,7 @@ export function Store() {
         <h3 className="text-lg font-semibold mb-3">Produtos</h3>
         <div className="grid grid-cols-2 gap-4">
           {products.map((product) => (
-            <CardProduct key={product.id} id={product.id} nome={product.nome} />
+            <CardProduct key={product.id} id={product.id} nome={product.nome} imagem={product.imagem} />
           ))}
         </div>
       </div>

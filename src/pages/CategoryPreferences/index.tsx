@@ -23,7 +23,7 @@ export function CategoryPreferences() {
   useEffect(() => {
     async function loadData() {
       try {
-        const response = await fetch("http://localhost:3000/categoria");
+        const response = await fetch("http://localhost:3001/categoria");
         const data: CategoryType[] = await response.json();
         if (response.ok && Array.isArray(data)) {
           setCategories(data);
@@ -47,7 +47,7 @@ export function CategoryPreferences() {
     const categoryIds = selectedCategories.map((c) => c.id);
 
     try {
-      const res = await fetch("http://localhost:3000/user-categories", {
+      const res = await fetch("http://localhost:3001/user-categories", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

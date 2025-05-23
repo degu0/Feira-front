@@ -23,7 +23,7 @@ export function Login() {
 
     try {
       const res = await fetch(
-        `http://localhost:3000/user?email=${email}&senha=${password}`
+        `http://localhost:3001/user?email=${email}&senha=${password}`
       );
 
       const data: UserType[] = await res.json();
@@ -49,8 +49,8 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-6 bg-white">
-      <img src={logo} alt="Logo do aplicativo" className="w-24 mb-6" />
+    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-6 bg-white text-lg">
+      <img src={logo} alt="Logo do aplicativo" className="w-28 mb-6" />
       <form onSubmit={handleLogin}>
         <div className="flex flex-col gap-2">
           <label htmlFor="email">Email:</label>
@@ -82,7 +82,7 @@ export function Login() {
           Faça login
         </button>
 
-        <p className="text-sm">
+        <p className="text-base">
           Ainda não possui uma conta?{" "}
           <Link to="/register" className="font-bold">
             Cadastre-se

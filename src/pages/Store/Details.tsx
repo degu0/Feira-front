@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Menu } from "../../components/Menu";
-import { FaArrowLeft} from "react-icons/fa";
+import { FaInstagram, FaRegStar } from "react-icons/fa";
 import loja from "../../../public/loja.jpg";
+import {
+  IoCubeOutline,
+  IoDocumentTextOutline,
+  IoLocationOutline,
+} from "react-icons/io5";
+import { MdOutlineWatchLater } from "react-icons/md";
+import { IoIosArrowForward } from "react-icons/io";
+import { Header } from "../../components/Header";
 
 type StoreType = {
   id: string;
@@ -26,7 +34,7 @@ export function Details() {
     async function fetchStoreDetails() {
       try {
         const responseStore = await fetch(
-          `http://localhost:3000/lojas?id=${id}`
+          `http://localhost:3001/lojas?id=${id}`
         );
         if (!responseStore.ok) {
           throw new Error(`Erro ao buscar lojas: ${responseStore.status}`);
@@ -45,46 +53,70 @@ export function Details() {
   }, [id]);
 
   return (
-    <div className="p-4 bg-white min-h-screen">
+    <div className="bg-gray-200 min-h-screen">
       <div className="h-full">
-        <header className="flex items-center gap-2 mb-4">
-          <FaArrowLeft
-            onClick={() => navigate(-1)}
-            className="text-xl ml-5 text-orange-700"
-          />
-          <h2 className="text-lg font-semibold text-orange-700">Detelhes da loja</h2>
-        </header>
-        <div className="my-15 flex">
+        <Header title="Detalhes da loja" />
+        <div className="h-screen flex bg-white">
           <ul className="w-full m-4 space-y-2">
             <p className="text-xl font-bold flex items-center gap-5">
-              <img src={loja} alt="logo da loja" className="w-20 rounded-lg" />
+              <img src={loja} alt="logo da loja" className="w-32 h-32 rounded-lg" />
               {store?.nome}
             </p>
-            <li className="flex justify-between items-center">
-              <p>Avaliações</p>
-              <p>4.5 de 5</p>
+            <li className="flex justify-between items-center py-5 border-b border-amber-600/25 ">
+              <div className="flex items-center gap-5">
+                <FaRegStar className="text-amber-600 text-2xl" />
+                <p>Avaliações</p>
+              </div>
+              <button
+                onClick={() => navigate(`/assessment/${id}`)}
+                className="p-2 border border-amber-600 rounded-md hover:bg-amber-50 transition"
+              >
+                <IoIosArrowForward className="text-amber-600 text-xl" />
+              </button>
             </li>
-            <li className="flex justify-between items-center">
-              <p>Produtos</p>
-              <p>4.5 de 5</p>
+            <li className="flex justify-between items-center py-5 border-b border-amber-600/25">
+              <div className="flex items-center gap-5">
+                <IoCubeOutline className="text-amber-600 text-2xl" />
+                <p className="text-zinc-800 text-base font-medium">Produtos</p>
+              </div>
+              <p className="text-amber-600 text-sm font-medium">{store?.produtos.length}</p>
             </li>
-            <li className="flex justify-between items-center">
-              <p>Endereço</p>
-              <p>{store?.localizacao}</p>
+
+            <li className="flex justify-between items-center py-5 border-b border-amber-600/25">
+              <div className="flex items-center gap-5">
+                <IoLocationOutline className="text-amber-600 text-2xl" />
+                <p className="text-zinc-800 text-base font-medium">Endereço</p>
+              </div>
+              <p className="text-amber-600 text-sm font-medium">
+                {store?.localizacao}
+              </p>
             </li>
-            <li className="flex justify-between items-center">
-              <p>Aderiu</p>
-              <p>10 semanas</p>
+
+            <li className="flex justify-between items-center py-5 border-b border-amber-600/25">
+              <div className="flex items-center gap-5">
+                <MdOutlineWatchLater className="text-amber-600 text-2xl" />
+                <p className="text-zinc-800 text-base font-medium">Aderiu</p>
+              </div>
+              <p className="text-amber-600 text-sm font-medium">10 semanas</p>
             </li>
-            <li className="flex justify-between items-center">
-              <p>Descrição</p>
-              <p>{store?.descricao}</p>
+
+            <li className="flex justify-between items-center py-5">
+              <div className="flex items-center gap-5">
+                <IoDocumentTextOutline className="text-amber-600 text-2xl" />
+                <p className="text-zinc-800 text-base font-medium">Descrição</p>
+              </div>
+              <p className="text-amber-600 text-sm font-medium">
+                {store?.descricao}
+              </p>
             </li>
-            <div>
-                <h2 className="font-semibold text-lg">Redes Sociais</h2>
+            <div className="flex flex-col gap-6 my-7">
+              <h2 className="font-semibold text-xl">Redes Sociais</h2>
               <li className="flex justify-between items-center">
-                <p>Instagram</p>
-                <p>{store?.redes_sociais}</p>
+                <div className="flex items-center gap-5">
+                  <FaInstagram className="text-amber-600 text-2xl" />
+                  <p>Instagram</p>
+                </div>
+                <p className="text-amber-600">{store?.redes_sociais}</p>
               </li>
             </div>
           </ul>

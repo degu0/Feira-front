@@ -55,7 +55,7 @@ export function CadastroLogin() {
     try {
       const userId = Math.floor(Math.random() * 10000).toString();
 
-      const res = await fetch("http://localhost:3000/user", {
+      const res = await fetch("http://localhost:3001/user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

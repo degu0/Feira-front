@@ -1,9 +1,8 @@
-import { useNavigate, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import jeans from "../../../public/Jeans.jpg";
-import { FaArrowLeftLong } from "react-icons/fa6";
 import { CustomCheckbox } from "../../components/CustomCheckbox";
+import { Header } from "../../components/Header";
 
 type ProductType = {
   id: string;
@@ -12,6 +11,7 @@ type ProductType = {
   categoria: number;
   cor: string;
   composicao: string;
+  imagem:string;
 };
 
 type CategoryType = {
@@ -19,7 +19,6 @@ type CategoryType = {
 };
 
 export function Product() {
-  const navigate = useNavigate();
   const { id } = useParams();
   const [product, setProduct] = useState<ProductType>({
     id: "",
@@ -28,6 +27,7 @@ export function Product() {
     categoria: 0,
     cor: "",
     composicao: "",
+    imagem: ""
   });
   const [category, setCategory] = useState<CategoryType>({ nome: "" });
 
@@ -37,7 +37,7 @@ export function Product() {
     async function fetchProductAndCategory() {
       try {
         const responseProduct = await fetch(
-          `http://localhost:3000/produtos?id=${id}`
+          `http://localhost:3001/produtos?id=${id}`
         );
         const dataProduct: ProductType[] = await responseProduct.json();
 
@@ -50,7 +50,7 @@ export function Product() {
         setProduct(product);
 
         const responseCategory = await fetch(
-          `http://localhost:3000/categoria?id=${product.categoria}`
+          `http://localhost:3001/categoria?id=${product.categoria}`
         );
         const dataCategory: CategoryType[] = await responseCategory.json();
 
@@ -71,14 +71,9 @@ export function Product() {
     <div className="h-screen flex flex-col">
       <div
         className="flex-1 bg-center bg-cover bg-no-repeat"
-        style={{ backgroundImage: `url(${jeans})` }}
+        style={{ backgroundImage: `url(${product.imagem})` }}
       >
-        <div
-          className="bg-gray-200 rounded-full text-2xl w-10 h-10 flex items-center justify-center m-3"
-          onClick={() => navigate(-1)}
-        >
-          <FaArrowLeftLong />
-        </div>
+        <Header />
       </div>
       <div className="h-[50%] overflow-y-auto px-4 py-2 bg-white">
         <div className="flex flex-col gap-2">
@@ -94,7 +89,7 @@ export function Product() {
           </div>
         </div>
         <div className="fixed bottom-0 left-0 w-full flex justify-center mb-5">
-          <button className="bg-amber-600 w-[90%] rounded-lg p-5 text-white">
+          <button className="bg-amber-600 w-[90%] rounded-[100px] p-5 text-white">
             Direção para loja
           </button>
         </div>

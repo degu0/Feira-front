@@ -1,17 +1,18 @@
 import { NavLink } from "react-router-dom";
-import jeans from "../../public/Jeans.jpg";
 import { FaRegHeart } from "react-icons/fa";
 
 type CardProductProps = {
   id: string;
   nome: string;
-  categoria?: number;
+  categoria?: string;
+  imagem: string;
 };
 
 export const CardProduct: React.FC<CardProductProps> = ({
   id,
   nome,
-  categoria
+  categoria,
+  imagem
 }) => {
   return (
     <NavLink
@@ -19,7 +20,7 @@ export const CardProduct: React.FC<CardProductProps> = ({
       className="w-44 h-64 relative block"
     >
       <img
-        src={jeans}
+        src={imagem}
         alt={nome}
         className="w-44 h-44 absolute top-0 left-0 rounded-tl-[5px] rounded-tr-[5px] object-cover"
       />
@@ -35,8 +36,8 @@ export const CardProduct: React.FC<CardProductProps> = ({
         {categoria}
       </div>
 
-      <div className="w-6 h-6 absolute top-2 right-2 overflow-hidden">
-          <FaRegHeart className="text-amber-600 text-sm" />
+      <div className="w-7 h-10 absolute top-2 right-2 overflow-hidden">
+          <FaRegHeart className="text-amber-600 text-2xl" />
       </div>
     </NavLink>
   );

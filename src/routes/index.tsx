@@ -15,6 +15,8 @@ import { ExploreCategory } from "../pages/Category/ExploreCategory";
 import { Store } from "../pages/Store";
 import { Details } from "../pages/Store/Details";
 import { Wishlist } from "../pages/Wishlist";
+import { Assessment } from "../pages/Assessment";
+import { Comments } from "../pages/Assessment/Comments";
 
 export function AppRouter() {
   return (
@@ -27,6 +29,8 @@ export function AppRouter() {
       <Route path="/product/:id" element={<Product />} />
       <Route path="/store/:id" element={<Store />} />
       <Route path="/store/details/:id" element={<Details />} />
+      <Route path="/assessment/:idStore" element={<Assessment />} />
+      <Route path="/comments/:idStore" element={<Comments />} />
       <Route path="/category" element={<Category />} />
       <Route path="/category/:category" element={<ExploreCategory />} />
       <Route path="/search/:searchTerm" element={<SearchResults />} />
