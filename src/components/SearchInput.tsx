@@ -24,15 +24,15 @@ export const SearchInput = () => {
       <div className="relative w-full">
         <input
           type="text"
-          placeholder={lastSearch ? `${lastSearch}` : "Pesquise o produto"}
-          className="border-none rounded-[100px] text-black w-full p-3 pr-10 bg-neutral-50 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"
+          placeholder="Pesquisar lojas ou produtos"
+          className="border-none rounded-[100px] text-black w-full p-3 pl-15 bg-neutral-50 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") handleSearch();
           }}
         />
-        <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-amber-600" onClick={handleSearch}>
+        <button className="absolute left-5 top-1/2 transform -translate-y-1/2 text-amber-600" onClick={handleSearch}>
           <IoIosSearch size={24} />
         </button>
       </div>

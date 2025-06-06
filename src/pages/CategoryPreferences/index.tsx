@@ -9,8 +9,8 @@ type CategoryType = {
 };
 
 type UserType = {
-  id: string
-}
+  id: string;
+};
 
 type Option = {
   id: string;
@@ -22,22 +22,22 @@ export function CategoryPreferences() {
   const { id: userId } = useParams();
   const navigate = useNavigate();
 
-  const [selectedCategories, setSelectedCategories] = useState<CategoryType[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<CategoryType[]>(
+    []
+  );
   const [categories, setCategories] = useState<CategoryType[]>([]);
 
   useEffect(() => {
     async function loadData() {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/categorias/",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data: {results: CategoryType[]} = await response.json();
+        const response = await fetch("http://127.0.0.1:8000/api/categorias/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data: { results: CategoryType[] } = await response.json();
         if (response.ok && Array.isArray(data.results)) {
           setCategories(data.results);
         } else {
@@ -59,7 +59,6 @@ export function CategoryPreferences() {
     // }
 
     // const categoryIds = selectedCategories.map((c) => c.id);
-    
 
     // try {
     //   const res = await fetch("http://127.0.0.1:8000/api/cliente/", {
@@ -82,15 +81,16 @@ export function CategoryPreferences() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-10 bg-gradient-to-b from-orange-100 to-white">
-      <img src={logo} alt="Logo do aplicativo" className="w-24 mb-8" />
+    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-10 bg-white">
+      <img src={logo} alt="Logo do aplicativo" className="w-54 mb-8" />
 
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md flex flex-col gap-10">
         <CustomSelect
           type="checkbox"
           title="Selecione suas categorias preferidas"
           values={categories}
           name="category"
+          image
           onChange={(selected) => {
             if (Array.isArray(selected)) {
               setSelectedCategories(selected as Option[]);
@@ -101,12 +101,14 @@ export function CategoryPreferences() {
             }
           }}
         />
-        <button
-          className="bg-amber-600 hover:bg-amber-700 text-white text-lg font-semibold py-3 rounded-full w-full mt-6 shadow-md transition duration-300"
-          onClick={handleRegisterCategoryOfUser}
-        >
-          Gerar minhas recomendações
-        </button>
+        <div className="flex items-center justify-center">
+          <button
+            className="w-64 h-11 relative bg-amber-600 text-white rounded-[100px] text-lg font-medium mb-2"
+            onClick={handleRegisterCategoryOfUser}
+          >
+            Visualizar lojas
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoPeople } from "react-icons/go";
 import { CiCalendar, CiLocationOn } from "react-icons/ci";
-import { MdOutlineMailOutline } from "react-icons/md";
+import { MdLogout, MdOutlineMailOutline } from "react-icons/md";
 import { FiPhone } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import { Header } from "../../components/Header";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
 type UserType = {
   id: string;
@@ -31,6 +32,7 @@ export function Profile() {
   const userData = localStorage.getItem("user");
   const userType = userData ? JSON.parse(userData).tipo : "Cliente";
 
+  const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState<UserType>({
     id: "",
     nome: "",
@@ -53,8 +55,6 @@ export function Profile() {
         });
 
         const data: ApiResponse = await response.json();
-        console.log(data.cliente);
-        
 
         if (response.ok && data) {
           if (userType === "Lojista" && data.lojista) {
@@ -94,18 +94,42 @@ export function Profile() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-200">
-      <Header title="Perfil" menu />
-      <div className="h-screen bg-white rounded-lg p-4">
-        <div className="flex items-center gap-3 text-lg font-semibold">
+    <div className="min-h-screen flex flex-col">
+      <div className="flex items-center justify-end p-4 w-full">
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-8 h-8"
+        >
+          <BsThreeDotsVertical className="w-full h-full text-amber-600" />
+        </button>
+      </div>
+      {isOpen && (
+        <div className="absolute left-58 top-6 rounded-md bg-white shadow-lg z-10 text-amber-600">
+          <ul className="py-1">
+            <li
+              onClick={() => {
+                navigate("/login");
+              }}
+              className="px-8 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-2"
+            >
+              <MdLogout /> <span className="text-zinc-800">Sair</span>
+            </li>
+          </ul>
+        </div>
+      )}
+      <div className="h-screen bg-white rounded-lg px-6">
+        <div className="flex items-center gap-5">
           <img src={profile} className="w-28 h-28 rounded-lg" />
-          <p>{user.nome}</p>
+          <p className="text-zinc-800 text-xl font-bold leading-3">{user.nome}</p>
         </div>
         <ul>
           <li className="flex justify-start items-center gap-20 border-b border-amber-600/25 py-5">
-            <div className="flex items-center gap-5 w-[160px]">
-              <GoPeople className="text-amber-600 text-2xl" />
-              <p className="text-zinc-800 text-base font-medium">Tipo de usuário</p>
+            <div className="flex items-center gap-2 w-[160px]">
+              <GoPeople className="text-amber-600 text-3xl" />
+              <p className="text-zinc-800 text-base font-medium leading-3 w-full">
+                Tipo de usuário
+              </p>
             </div>
             <p className="text-amber-600 text-sm font-medium">{userType}</p>
           </li>
@@ -113,26 +137,32 @@ export function Profile() {
           {userType === "Cliente" && (
             <>
               <li className="flex justify-start items-center gap-20 border-b border-amber-600/25 py-5">
-                <div className="flex items-center gap-5 w-[160px]">
-                  <GoPeople className="text-amber-600 text-2xl" />
-                  <p className="text-zinc-800 text-base font-medium">Gênero</p>
+                <div className="flex items-center gap-2 w-[160px]">
+                  <GoPeople className="text-amber-600 text-3xl" />
+                  <p className="text-zinc-800 text-base font-medium leading-3">Gênero</p>
                 </div>
-                <p className="text-amber-600 text-sm font-medium">{user.genero}</p>
+                <p className="text-amber-600 text-sm font-medium">
+                  {user.genero}
+                </p>
               </li>
               <li className="flex justify-start items-center gap-20 border-b border-amber-600/25 py-5">
-                <div className="flex items-center gap-5 w-[160px]">
-                  <FiPhone className="text-amber-600 text-2xl" />
-                  <p className="text-zinc-800 text-base font-medium">Telefone</p>
+                <div className="flex items-center gap-2 w-[160px]">
+                  <FiPhone className="text-amber-600 text-3xl" />
+                  <p className="text-zinc-800 text-base font-medium leading-3">
+                    Telefone
+                  </p>
                 </div>
-                <p className="text-amber-600 text-sm font-medium">{user.telefone}</p>
+                <p className="text-amber-600 text-sm font-medium">
+                  {user.telefone}
+                </p>
               </li>
             </>
           )}
 
           <li className="flex justify-start items-center gap-20 border-b border-amber-600/25 py-5">
-            <div className="flex items-center gap-5 w-[160px]">
-              <CiCalendar className="text-amber-600 text-2xl" />
-              <p className="text-zinc-800 text-base font-medium">Idade</p>
+            <div className="flex items-center gap-2 w-[160px]">
+              <CiCalendar className="text-amber-600 text-3xl" />
+              <p className="text-zinc-800 text-base font-medium leading-3">Idade</p>
             </div>
             <p className="text-amber-600 text-sm font-medium">
               {calcularIdade(user.faixa_etaria)} anos
@@ -140,17 +170,17 @@ export function Profile() {
           </li>
 
           <li className="flex justify-start items-center gap-20 border-b border-amber-600/25 py-5">
-            <div className="flex items-center gap-5 w-[160px]">
-              <CiLocationOn className="text-amber-600 text-2xl" />
-              <p className="text-zinc-800 text-base font-medium">Endereço</p>
+            <div className="flex items-center gap-2 w-[160px]">
+              <CiLocationOn className="text-amber-600 text-3xl" />
+              <p className="text-zinc-800 text-base font-medium leading-3">Endereço</p>
             </div>
             <p className="text-amber-600 text-sm font-medium">Caruaru</p>
           </li>
 
           <li className="flex justify-start items-center gap-20 py-5">
-            <div className="flex items-center gap-5 w-[160px]">
-              <MdOutlineMailOutline className="text-amber-600 text-2xl" />
-              <p className="text-zinc-800 text-base font-medium">Email</p>
+            <div className="flex items-center gap-2 w-[160px]">
+              <MdOutlineMailOutline className="text-amber-600 text-3xl" />
+              <p className="text-zinc-800 text-base font-medium leading-3">Email</p>
             </div>
             <p className="text-amber-600 text-sm font-medium">{user.email}</p>
           </li>
@@ -158,7 +188,7 @@ export function Profile() {
           {userType === "Cliente" && (
             <li className="flex justify-between items-center gap-2 py-5">
               <div className="flex items-center gap-3 text-lg">
-                <FaHeart className="text-amber-600 text-2xl" />
+                <FaHeart className="text-amber-600 text-3xl" />
                 <p>Favoritos</p>
               </div>
               <button

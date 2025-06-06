@@ -27,7 +27,7 @@ export function CadastroLogin() {
   const typeOfPublic = [
     { id: "Local", nome: "Local" },
     { id: "Turista", nome: "Turista" },
-    { id: "Lojista", nome: "Trabalhadores Locais" },
+    { id: "Lojista", nome: "Feirante" },
   ];
 
   const genders = [
@@ -54,7 +54,8 @@ export function CadastroLogin() {
   const tipoUsuarioValue = watch("tipoUsuario");
 
   const onSubmit = async (formData: FormData) => {
-    const { nome, email, senha, tipoUsuario, genero, data_nascimento } = formData;
+    const { nome, email, senha, tipoUsuario, genero, data_nascimento } =
+      formData;
 
     try {
       const registerUrl =
@@ -112,14 +113,14 @@ export function CadastroLogin() {
             Authorization: `Bearer ${tokenData.access}`,
           },
           body: JSON.stringify({
-            email, 
+            email,
             nome,
             cpf: "123",
             telefone: "123",
             faixa_etaria: "18-25",
             tipo: tipoUsuario,
             genero,
-            categorias_desejadas: [1]
+            categorias_desejadas: [1],
           }),
         });
         const dataUser = {
@@ -129,81 +130,108 @@ export function CadastroLogin() {
         localStorage.setItem("user", JSON.stringify(dataUser));
         navigate(`/categoryPreferences/${email}`);
       }
-
     } catch (error) {
       console.error("Erro no cadastro:", error);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-6 bg-white">
-      <img src={logo} alt="Logo do aplicativo" className="w-30 mb-6" />
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+    <div className="min-h-screen flex flex-col items-center justify-center py-6 bg-white">
+      <img src={logo} alt="Logo do aplicativo" className="w-52 h-24 mb-6" />
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <label>Nome:</label>
-          <input {...register("nome")} className="w-full mb-3 p-3 border border-orange-500 rounded-md" />
+          <label>Nome</label>
+          <input
+            {...register("nome")}
+            className="min-w-85 mb-3 px-4 py-2 rounded-[5px] outline-1 outline-offset-[-0.50px] outline-amber-600"
+          />
           {errors.nome && <p className="text-red-500">{errors.nome.message}</p>}
         </div>
 
         <div className="flex flex-col gap-1">
-          <label>Data de nascimento:</label>
+          <label>Data de nascimento</label>
           <input
             type="date"
             {...register("data_nascimento")}
-            className="w-full mb-3 p-3 border border-orange-500 rounded-md"
+            className="min-w-85 mb-3 px-4 py-2 rounded-[5px] outline-1 outline-offset-[-0.50px] outline-amber-600"
           />
-          {errors.data_nascimento && <p className="text-red-500">{errors.data_nascimento.message}</p>}
+          {errors.data_nascimento && (
+            <p className="text-red-500">{errors.data_nascimento.message}</p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="block mb-1 text-gray-700">Tipo de Usuário:</label>
+          <label className="block mb-1 text-gray-700">Tipo de Usuário</label>
           <div className="flex justify-between gap-10">
             {typeOfPublic.map((type) => (
-              <label key={type.id} className="flex">
-                <input type="radio" value={type.id} {...register("tipoUsuario")} className="accent-amber-600" />
+              <label key={type.id} className="flex gap-2">
+                <input
+                  type="radio"
+                  value={type.id}
+                  {...register("tipoUsuario")}
+                  className="accent-amber-600"
+                />
                 {type.nome}
               </label>
             ))}
           </div>
-          {errors.tipoUsuario && <p className="text-red-500">{errors.tipoUsuario.message}</p>}
+          {errors.tipoUsuario && (
+            <p className="text-red-500">{errors.tipoUsuario.message}</p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="block mb-1 text-gray-700">Gênero:</label>
+          <label className="block mb-1 text-gray-700">Gênero</label>
           <div className="flex justify-between">
             {genders.map((gender) => (
-              <label key={gender.id} className="flex items-center gap-1">
-                <input type="radio" value={gender.id} {...register("genero")} className="accent-amber-600" />
+              <label key={gender.id} className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  value={gender.id}
+                  {...register("genero")}
+                  className="accent-amber-600"
+                />
                 {gender.nome}
               </label>
             ))}
           </div>
-          {errors.genero && <p className="text-red-500">{errors.genero.message}</p>}
+          {errors.genero && (
+            <p className="text-red-500">{errors.genero.message}</p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1">
-          <label>Email:</label>
+          <label>Email</label>
           <input
             type="email"
             {...register("email")}
-            className="w-full mb-3 p-3 border border-orange-500 rounded-md"
+            className="min-w-85 mb-3 px-4 py-2 rounded-[5px] outline-1 outline-offset-[-0.50px] outline-amber-600"
           />
-          {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+          {errors.email && (
+            <p className="text-red-500">{errors.email.message}</p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1">
-          <label>Senha:</label>
+          <label>Senha</label>
           <input
             type="password"
             {...register("senha")}
-            className="w-full mb-3 p-3 border border-orange-500 rounded-md"
+            className="min-w-85 mb-3 px-4 py-2 rounded-[5px] outline-1 outline-offset-[-0.50px] outline-amber-600"
           />
-          {errors.senha && <p className="text-red-500">{errors.senha.message}</p>}
+          {errors.senha && (
+            <p className="text-red-500">{errors.senha.message}</p>
+          )}
         </div>
 
-        <button type="submit" className="bg-orange-500 text-white w-full py-3 rounded-full mt-5">
-          Cadastrar
-        </button>
+        <div className="flex flex-col items-center">
+          <button
+            type="submit"
+            className="w-64 h-11 relative bg-amber-600 text-white rounded-[100px] text-lg font-medium mb-5"
+          >
+            Cadastrar
+          </button>
+        </div>
       </form>
     </div>
   );

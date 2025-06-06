@@ -45,7 +45,7 @@ export function Login() {
           id: userInfo.id,
           tipo: users.cliente ? "Cliente" : "Lojista",
         };
-        console.log(dataUser)
+        console.log(dataUser);
 
         localStorage.setItem("user", JSON.stringify(dataUser));
         setUser(dataUser);
@@ -61,37 +61,39 @@ export function Login() {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center px-4 py-6 bg-white text-lg">
-      <img src={logo} alt="Logo do aplicativo" className="w-28 mb-6" />
-      <form onSubmit={handleLogin}>
+      <img src={logo} alt="Logo do aplicativo" className="w-52 h-24" />
+      <form onSubmit={handleLogin} className="my-30 flex flex-col gap-3">
         <div className="flex flex-col gap-2">
-          <label htmlFor="email">Email:</label>
+          <label htmlFor="email">Email</label>
           <input
             id="email"
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full mb-3 p-3 border border-orange-500 rounded-md"
+            className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600"
           />
         </div>
         <div className="flex flex-col gap-2">
-          <label htmlFor="password">Senha:</label>
+          <label htmlFor="password">Senha</label>
           <input
             id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full mb-3 p-3 border border-orange-500 rounded-md"
+            className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600"
           />
         </div>
 
         {erro && <p className="text-red-500">{erro}</p>}
 
-        <button
-          type="submit"
-          className="bg-orange-500 text-white w-full py-3 rounded-full mb-2"
-        >
-          Faça login
-        </button>
+        <div className="flex items-center justify-center">
+          <button
+            type="submit"
+            className="w-64 h-11 relative bg-amber-600 text-white rounded-[100px] text-lg font-medium mb-2"
+          >
+            Login
+          </button>
+        </div>
 
         <p className="text-base">
           Ainda não possui uma conta?{" "}

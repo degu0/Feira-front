@@ -85,7 +85,6 @@ export function HomeCliente() {
         if (!responseStores.ok || !Array.isArray(dataStores.results)) {
           throw new Error("Invalid stores response");
         }
-        console.log(dataStores.results);
 
         setStores(dataStores.results);
 
@@ -189,7 +188,7 @@ export function HomeCliente() {
                   <p className="text-sm text-gray-500">{store?.localizacao}</p>
                   <div className="flex items-center gap-1 text-sm text-amber-600">
                     <FaStar className="text-md" />
-                    <span>{store?.nota_media ? store?.nota_media : 5}</span>
+                    <span className="text-black">{store?.nota_media ? store?.nota_media : 5}</span>
                   </div>
                 </div>
               </div>

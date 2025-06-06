@@ -10,19 +10,19 @@ type MenuProps = {
 
 export const Menu: React.FC<MenuProps> = ({ type }) => {
   return (
-    <nav className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-md flex justify-around items-center h-16 z-50 text-2xl">
+    <nav className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-md flex justify-around items-center h-20 z-50 text-2xl">
       <Link
         to="/"
-        className="flex flex-col items-center text-gray-700 hover:text-blue-500"
+        className="flex flex-col items-center gap-1 text-black"
       >
         <GoHome className="text-amber-700" />
-        <span className="text-xs">Home</span>
+        <span className="text-xs">Inicio</span>
       </Link>
 
       {type === "Cliente" && (
         <Link
           to="/category"
-          className="flex flex-col items-center text-gray-700 hover:text-blue-500"
+          className="flex flex-col items-center gap-1 text-black"
         >
           <HiOutlineSquares2X2 className="text-amber-700" />
           <span className="text-xs">Categorias</span>
@@ -33,14 +33,14 @@ export const Menu: React.FC<MenuProps> = ({ type }) => {
         <>
           <Link
             to="/dashboard"
-            className="flex flex-col items-center text-gray-700 hover:text-blue-500"
+            className="flex flex-col items-center gap-1 text-black"
           >
             <FiPieChart className="text-amber-700" />
             <span className="text-xs">Relatórios</span>
           </Link>
           <Link
             to="/productList"
-            className="flex flex-col items-center text-gray-700 hover:text-blue-500"
+            className="flex flex-col items-center gap-1 text-black"
           >
             <FiPackage  className="text-amber-700" />
             <span className="text-xs">Meus Produtos</span>
@@ -50,7 +50,7 @@ export const Menu: React.FC<MenuProps> = ({ type }) => {
 
       <Link
         to="/profile"
-        className="flex flex-col items-center text-gray-700 hover:text-blue-500"
+        className="flex flex-col items-center gap-1 text-black"
       >
         <RxPerson className="text-amber-700" />
         <span className="text-xs">Perfil</span>

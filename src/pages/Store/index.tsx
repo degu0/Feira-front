@@ -104,7 +104,7 @@ export function Store() {
   }, [id, token]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-gray-200">
       <div
         className="relative h-48 w-full bg-cover bg-center"
         style={{ backgroundImage: `url(${banner})` }}
@@ -113,14 +113,14 @@ export function Store() {
         <img
           src={logo}
           alt="Imagem da loja"
-          className="w-24 h-24 rounded-full absolute bottom-[-2rem] left-1/2 transform -translate-x-1/2 border-4 border-white shadow-md"
+          className="w-32 h-32 rounded-lg absolute bottom-[-2rem] left-1/2 transform -translate-x-1/2 shadow-md"
         />
       </div>
 
-      <div className="mt-14 px-4 flex items-start justify-between">
+      <div className="mt-3 px-6 pt-10 pb-5 flex items-start justify-between bg-white rounded-[5px] shadow-[0px_2px_2px_0px_rgba(0,0,0,0.25)]">
         <div className="space-y-1">
-          <h2 className="text-2xl font-semibold">{store?.nome}</h2>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+          <h2 className="text-2xl font-semibold text-zinc-800">{store?.nome}</h2>
+          <div className="flex items-center gap-2 text-sm font-medium text-zinc-800 ">
             <div
               className={`w-3 h-3 rounded-full ${corMap[store?.setor ?? ""]}`}
             ></div>
@@ -131,7 +131,7 @@ export function Store() {
           <p className="text-sm text-gray-500">{store?.localizacao}</p>
           <div className="flex items-center gap-1 text-sm text-amber-600">
             <FaStar className="text-md" />
-            <span>{store?.nota_media ? store?.nota_media : 5 }</span>
+            <span className="text-black">{store?.nota_media ? store?.nota_media : 5 }</span>
           </div>
         </div>
 
@@ -143,8 +143,8 @@ export function Store() {
         </button>
       </div>
 
-      <div className="p-4">
-        <h3 className="text-lg font-semibold mb-3">Produtos</h3>
+      <div className="min-h-screen mt-3 p-6 bg-white">
+        <h3 className="text-xl text-zinc-800 font-semibold mb-3">Produtos</h3>
         <div className="grid grid-cols-2 gap-4">
           {products.map((product) => (
             <CardProduct
