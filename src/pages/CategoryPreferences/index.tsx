@@ -8,12 +8,17 @@ type CategoryType = {
   nome: string;
 };
 
+type UserType = {
+  id: string
+}
+
 type Option = {
   id: string;
   nome: string;
 };
 
 export function CategoryPreferences() {
+  const token = localStorage.getItem("token");
   const { id: userId } = useParams();
   const navigate = useNavigate();
 
@@ -23,10 +28,18 @@ export function CategoryPreferences() {
   useEffect(() => {
     async function loadData() {
       try {
-        const response = await fetch("http://localhost:3001/categoria");
-        const data: CategoryType[] = await response.json();
-        if (response.ok && Array.isArray(data)) {
-          setCategories(data);
+        const response = await fetch("http://127.0.0.1:8000/api/categorias/",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data: {results: CategoryType[]} = await response.json();
+        if (response.ok && Array.isArray(data.results)) {
+          setCategories(data.results);
         } else {
           console.error("Erro na resposta da API:", data);
         }
@@ -36,35 +49,36 @@ export function CategoryPreferences() {
     }
 
     loadData();
-  }, []);
+  }, [token]);
 
   const handleRegisterCategoryOfUser = async () => {
-    if (!userId) {
-      console.error("ID do usuário não encontrado.");
-      return;
-    }
+    navigate("/");
+    // if (!userId) {
+    //   console.error("ID do usuário não encontrado.");
+    //   return;
+    // }
 
-    const categoryIds = selectedCategories.map((c) => c.id);
+    // const categoryIds = selectedCategories.map((c) => c.id);
+    
 
-    try {
-      const res = await fetch("http://localhost:3001/user-categories", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId,
-          categoryIds,
-        }),
-      });
+    // try {
+    //   const res = await fetch("http://127.0.0.1:8000/api/cliente/", {
+    //     method: "PUT",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({
+    //       userId,
+    //       categoryIds,
+    //     }),
+    //   });
 
-      if (res.ok) {
-        console.log("Categorias registradas com sucesso!");
-        navigate("/");
-      } else {
-        console.error("Erro ao registrar categorias.");
-      }
-    } catch (err) {
-      console.error("Erro ao enviar categorias:", err);
-    }
+    //   if (res.ok) {
+    //     console.log("Categorias registradas com sucesso!");
+    //   } else {
+    //     console.error("Erro ao registrar categorias.");
+    //   }
+    // } catch (err) {
+    //   console.error("Erro ao enviar categorias:", err);
+    // }
   };
 
   return (
@@ -88,7 +102,7 @@ export function CategoryPreferences() {
           }}
         />
         <button
-          className="bg-orange-600 hover:bg-orange-700 text-white text-lg font-semibold py-3 rounded-full w-full mt-6 shadow-md transition duration-300"
+          className="bg-amber-600 hover:bg-amber-700 text-white text-lg font-semibold py-3 rounded-full w-full mt-6 shadow-md transition duration-300"
           onClick={handleRegisterCategoryOfUser}
         >
           Gerar minhas recomendações

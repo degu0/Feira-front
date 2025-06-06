@@ -36,8 +36,8 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
 
   const getColorClass = (index: number) => {
     return index % 2 === 0
-      ? "bg-orange-500 hover:bg-orange-600 peer-checked:bg-orange-700"
-      : "bg-yellow-400 hover:bg-yellow-500 peer-checked:bg-yellow-600";
+      ? "bg-amber-600 hover:border-4 hover:border-amber-400 peer-checked:border-4 peer-checked:border-amber-400"
+      : "bg-amber-900 hover:border-4 hover:border-amber-400 peer-checked:border-4 peer-checked:border-amber-400";
   };
 
   return (

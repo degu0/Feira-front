@@ -25,6 +25,7 @@ type CategoryType = {
 };
 
 export function Category() {
+  const token = localStorage.getItem("token");
   const categoryImages: Record<string, string> = {
     "Moda Íntima": moda_intima,
     "Moda Praia": moda_praia,
@@ -49,12 +50,18 @@ export function Category() {
   useEffect(() => {
     async function loadData() {
       try {
-        const response = await fetch("http://localhost:3001/categoria");
+        const response = await fetch("http://127.0.0.1:8000/api/categorias/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+        });
         const data: CategoryType[] = await response.json();
 
         if (response.ok) {
-          if (Array.isArray(data)) {
-            setCategory(data);
+          if (Array.isArray(data.results)) {
+            setCategory(data.results);
           } else {
             console.error("Resposta inválida da API:", data);
           }
@@ -99,7 +106,7 @@ export function Category() {
           ))}
         </div>
       </div>
-      <Menu />
+      <Menu type="Cliente" />
     </div>
   );
 }

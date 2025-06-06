@@ -10,7 +10,7 @@ export const CustomCheckbox = () => {
 
     return(
         <button onClick={toggleCheckbox} className="text-3xl">
-            {checked ? <FaRegHeart />: <FaHeart className="text-amber-600" />}
+            {checked ? <FaRegHeart className="text-amber-600" />: <FaHeart className="text-amber-600" />}
         </button>
     )
 }

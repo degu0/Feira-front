@@ -3,8 +3,8 @@ import { FaTrashAlt } from "react-icons/fa";
 import { Menu } from "../../components/Menu";
 import { Header } from "../../components/Header";
 import StoreImage from "../../../public/loja.jpg";
-import jeans from "../../../public/Jeans.jpg";
 import { Link } from "react-router-dom";
+import jeans from "../../../public/Jeans.jpg";
 
 type FavoritesStoreType = {
   id: string;
@@ -30,6 +30,7 @@ type ProductType = {
 };
 
 export function Wishlist() {
+  const token = localStorage.getItem("token");
   const storedUserJSON = localStorage.getItem("user");
 
   const [mostrarProdutos, setMostrarProdutos] = useState(false);
@@ -40,43 +41,66 @@ export function Wishlist() {
     async function loadData() {
       try {
         if (!storedUserJSON) return;
-
-        const parsedUser: { id: string } = JSON.parse(storedUserJSON);
-
         const responseFavoritosLojas = await fetch(
-          `http://localhost:3001/lojasFavoritas?cliente=${parsedUser.id}`
+          `http://127.0.0.1:8000/api/lojas_favoritas/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        const dataFavoritosLoja: FavoritesStoreType[] =
+        const dataFavoritosLoja: { results: FavoritesStoreType[] } =
           await responseFavoritosLojas.json();
 
-        const lojasPromises = dataFavoritosLoja.map((data) =>
-          fetch(`http://localhost:3001/lojas?id=${data.loja}`).then((res) =>
-            res.json()
-          )
+        const lojasPromises = dataFavoritosLoja.results.map((data) =>
+          fetch(`http://127.0.0.1:8000/api/lojas/${data.loja}/`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }).then((res) => res.json())
         );
         const lojas = await Promise.all(lojasPromises);
-        setLojasFavoritas(lojas.flat());
+        setLojasFavoritas(lojas);
 
         const responseFavoritosProdutos = await fetch(
-          `http://localhost:3001/produtosFavoritos?cliente=${parsedUser.id}`
+          `http://127.0.0.1:8000/api/produtos_favoritos/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        const dataFavoritosProdutos: FavoritesProductType[] =
+        const dataFavoritosProdutos: { results: FavoritesProductType[] } =
           await responseFavoritosProdutos.json();
 
-        const produtosPromises = dataFavoritosProdutos.map((data) =>
-          fetch(`http://localhost:3001/produtos?id=${data.produto}`).then(
-            (res) => res.json()
-          )
+        const produtosPromises = dataFavoritosProdutos.results.map((data) =>
+          fetch(`http://127.0.0.1:8000/api/produtos/${data.produto}/`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }).then((res) => res.json())
         );
         const produtos = await Promise.all(produtosPromises);
-        setProdutosFavoritos(produtos.flat());
+        const produtosUnicos = produtos.filter(
+          (produto, index, self) =>
+            index === self.findIndex((p) => p.id === produto.id)
+        );
+        setProdutosFavoritos(produtosUnicos);
       } catch (error) {
         console.error("Erro ao buscar dados", error);
       }
     }
 
     loadData();
-  }, [storedUserJSON]);
+  }, [storedUserJSON, token]);
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col justify-between">
@@ -110,7 +134,7 @@ export function Wishlist() {
             {lojasFavoritas.map((loja) => (
               <Link
                 to={`/store/${loja.id}`}
-                key={loja.id}
+                key={`loja-${loja.id}`}
                 className="bg-white p-4 flex items-center gap-4 border-b border-amber-600/25"
               >
                 <div
@@ -135,13 +159,13 @@ export function Wishlist() {
             {produtosFavoritos.map((produto) => (
               <Link
                 to={`/product/${produto.id}`}
-                key={produto.id}
+                key={`produto-${produto.id}`}
                 className="bg-white p-4 flex items-center gap-4 border-b border-amber-600/25"
               >
                 <div
                   className="w-16 h-16 bg-gray-200 rounded-lg flex items-center 
                   justify-center text-gray-400 bg-center bg-cover bg-no-repeat"
-                  style={{ backgroundImage: `url(${produto.imagem})` }}
+                  style={{ backgroundImage: `url(${jeans})` }}
                 />
                 <div className="flex-1">
                   <h3 className="text-sm font-semibold text-gray-800">
@@ -157,7 +181,7 @@ export function Wishlist() {
           </ul>
         )}
       </div>
-      <Menu />
+      <Menu type="Cliente" />
     </div>
   );
 }

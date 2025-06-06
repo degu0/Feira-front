@@ -11,7 +11,8 @@ export function PrivateRoute({ children, roles }: PrivateRouteProps) {
   const { user } = useContext(AuthContext);
 
   if (!user) return <Navigate to="/login" replace />;
-  if (roles && !roles.includes(user.type)) return <Navigate to="/unauthorized" replace />;
+  
+  if (roles && !roles.includes(user.tipo)) return <Navigate to="/unauthorized" replace />;
 
   return <>{children}</>;
 }

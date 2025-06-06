@@ -16,51 +16,68 @@ type UserType = {
   genero: string;
   email: string;
   telefone: string;
-  tipoUsuario: string;
-  data_nascimento: string;
+  tipo: string;
+  faixa_etaria: string;
+};
+
+type ApiResponse = {
+  cliente?: UserType;
+  lojista?: UserType;
 };
 
 export function Profile() {
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const userData = localStorage.getItem("user");
+  const userType = userData ? JSON.parse(userData).tipo : "Cliente";
+
   const [user, setUser] = useState<UserType>({
     id: "",
     nome: "",
     genero: "",
     email: "",
     telefone: "",
-    tipoUsuario: "",
-    data_nascimento: "",
+    tipo: "",
+    faixa_etaria: "",
   });
-  const storedUserJSON = localStorage.getItem("user");
 
   useEffect(() => {
     async function loadData() {
       try {
-        const parsedUser: { id: string } = JSON.parse(storedUserJSON);
-        const response = await fetch(
-          `http://localhost:3001/user?id=${parsedUser.id}`
-        );
-        const data: UserType[] = await response.json();
-        console.log(data);
+        const response = await fetch("http://127.0.0.1:8000/api/meu-perfil/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        if (response.ok && data.length > 0) {
-          setUser(data[0]);
+        const data: ApiResponse = await response.json();
+        console.log(data.cliente);
+        
+
+        if (response.ok && data) {
+          if (userType === "Lojista" && data.lojista) {
+            setUser(data.lojista);
+          } else if (data.cliente) {
+            setUser(data.cliente);
+          }
         } else {
-          console.error("Erro no fetch de dados da usuario:", data);
+          console.error("Erro no fetch de dados da usuário:", data);
         }
       } catch (error) {
-        console.error("Erro ao buscar usuario:", error);
+        console.error("Erro ao buscar usuário:", error);
       }
     }
-    loadData();
-  }, [storedUserJSON]);
+
+    if (token) loadData();
+  }, [token, userType]);
 
   function calcularIdade(dataNascimento: string): number {
     const hoje = new Date();
     const nascimento = new Date(dataNascimento);
 
     let idade = hoje.getFullYear() - nascimento.getFullYear();
-
     const mesAtual = hoje.getMonth();
     const diaAtual = hoje.getDate();
     const mesNascimento = nascimento.getMonth();
@@ -76,88 +93,85 @@ export function Profile() {
     return idade;
   }
 
-  console.log(calcularIdade("2025-05-14"));
-
   return (
     <div className="min-h-screen flex flex-col bg-gray-200">
-      <Header title="Perfil" />
-      <div className="h-screen bg-white roudend-lg p-4">
+      <Header title="Perfil" menu />
+      <div className="h-screen bg-white rounded-lg p-4">
         <div className="flex items-center gap-3 text-lg font-semibold">
-          <img src={profile} className="w-32 h-32 rounded-lg" />
+          <img src={profile} className="w-28 h-28 rounded-lg" />
           <p>{user.nome}</p>
         </div>
         <ul>
-          <li className="flex justify-between items-center gap-2 border-b border-amber-600/25 py-5">
-            <div className="flex items-center gap-5">
+          <li className="flex justify-start items-center gap-20 border-b border-amber-600/25 py-5">
+            <div className="flex items-center gap-5 w-[160px]">
               <GoPeople className="text-amber-600 text-2xl" />
-              <p className="text-zinc-800 text-base font-medium">
-                Tipo de usuário
-              </p>
+              <p className="text-zinc-800 text-base font-medium">Tipo de usuário</p>
             </div>
-            <p className="text-amber-600 text-sm font-medium">
-              {user.tipoUsuario}
-            </p>
+            <p className="text-amber-600 text-sm font-medium">{userType}</p>
           </li>
 
-          <li className="flex justify-between items-center gap-2 border-b border-amber-600/25 py-5">
-            <div className="flex items-center gap-5">
-              <GoPeople className="text-amber-600 text-2xl" />
-              <p className="text-zinc-800 text-base font-medium">Gênero</p>
-            </div>
-            <p className="text-amber-600 text-sm font-medium">{user.genero}</p>
-          </li>
+          {userType === "Cliente" && (
+            <>
+              <li className="flex justify-start items-center gap-20 border-b border-amber-600/25 py-5">
+                <div className="flex items-center gap-5 w-[160px]">
+                  <GoPeople className="text-amber-600 text-2xl" />
+                  <p className="text-zinc-800 text-base font-medium">Gênero</p>
+                </div>
+                <p className="text-amber-600 text-sm font-medium">{user.genero}</p>
+              </li>
+              <li className="flex justify-start items-center gap-20 border-b border-amber-600/25 py-5">
+                <div className="flex items-center gap-5 w-[160px]">
+                  <FiPhone className="text-amber-600 text-2xl" />
+                  <p className="text-zinc-800 text-base font-medium">Telefone</p>
+                </div>
+                <p className="text-amber-600 text-sm font-medium">{user.telefone}</p>
+              </li>
+            </>
+          )}
 
-          <li className="flex justify-between items-center gap-2 border-b border-amber-600/25 py-5">
-            <div className="flex items-center gap-5">
+          <li className="flex justify-start items-center gap-20 border-b border-amber-600/25 py-5">
+            <div className="flex items-center gap-5 w-[160px]">
               <CiCalendar className="text-amber-600 text-2xl" />
               <p className="text-zinc-800 text-base font-medium">Idade</p>
             </div>
             <p className="text-amber-600 text-sm font-medium">
-              {calcularIdade(user.data_nascimento)}
+              {calcularIdade(user.faixa_etaria)} anos
             </p>
           </li>
 
-          <li className="flex justify-between items-center gap-2 border-b border-amber-600/25 py-5">
-            <div className="flex items-center gap-5">
+          <li className="flex justify-start items-center gap-20 border-b border-amber-600/25 py-5">
+            <div className="flex items-center gap-5 w-[160px]">
               <CiLocationOn className="text-amber-600 text-2xl" />
               <p className="text-zinc-800 text-base font-medium">Endereço</p>
             </div>
             <p className="text-amber-600 text-sm font-medium">Caruaru</p>
           </li>
 
-          <li className="flex justify-between items-center gap-2 border-b border-amber-600/25 py-5">
-            <div className="flex items-center gap-5">
-              <FiPhone className="text-amber-600 text-2xl" />
-              <p className="text-zinc-800 text-base font-medium">Telefone</p>
-            </div>
-            <p className="text-amber-600 text-sm font-medium">
-              {user.telefone}
-            </p>
-          </li>
-
-          <li className="flex justify-between items-center gap-2 py-5">
-            <div className="flex items-center gap-5">
+          <li className="flex justify-start items-center gap-20 py-5">
+            <div className="flex items-center gap-5 w-[160px]">
               <MdOutlineMailOutline className="text-amber-600 text-2xl" />
               <p className="text-zinc-800 text-base font-medium">Email</p>
             </div>
             <p className="text-amber-600 text-sm font-medium">{user.email}</p>
           </li>
 
-          <li className="flex justify-between items-center gap-2 py-5">
-            <div className="flex items-center gap-1 text-lg">
-              <FaHeart className="text-amber-600 text-2xl" />
-              <p>Favoritos</p>
-            </div>
-            <button
-              onClick={() => navigate(`/wishlist`)}
-              className="p-2 border border-amber-600 rounded-md hover:bg-amber-50 transition"
-            >
-              <IoIosArrowForward className="text-amber-600 text-xl" />
-            </button>
-          </li>
+          {userType === "Cliente" && (
+            <li className="flex justify-between items-center gap-2 py-5">
+              <div className="flex items-center gap-3 text-lg">
+                <FaHeart className="text-amber-600 text-2xl" />
+                <p>Favoritos</p>
+              </div>
+              <button
+                onClick={() => navigate(`/wishlist`)}
+                className="p-2 border border-amber-600 rounded-md hover:bg-amber-50 transition"
+              >
+                <IoIosArrowForward className="text-amber-600 text-xl" />
+              </button>
+            </li>
+          )}
         </ul>
       </div>
-      <Menu />
+      <Menu type={userType === "Cliente" ? "Cliente" : "Lojista"} />
     </div>
   );
 }

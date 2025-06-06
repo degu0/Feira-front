@@ -1,96 +1,117 @@
 import { useEffect, useState } from "react";
 import { Menu } from "../../components/Menu";
-import banner from "../../../public/banner.jpg";
-import loja from "../../../public/loja.jpg";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import { CardProduct } from "../../components/CardProduct";
 import { Header } from "../../components/Header";
+import logo from "../../../public/loja.jpg"
+import banner from "../../../public/banner.jpg"
 
 type StoreType = {
   id: string;
   nome: string;
-  categoria: string;
+  logo: string;
+  banner: string;
+  categorias: string[];
   lojista: string;
   localizacao: string;
   horario_funcionamento: string;
-  cor: string;
+  setor: string;
   produtos: string[];
+  nota_media: number;
 };
 
 type ProductType = {
   id: string;
   nome: string;
-  imagem: string
+  imagem: string;
 };
 
-type CategoryNameType = {
-  id: string;
-  nome: string;
-};
+type CategoryNameType = { nome: string }[];
 
 export function Store() {
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const { id } = useParams();
   const [store, setStore] = useState<StoreType | null>(null);
   const [products, setProducts] = useState<ProductType[]>([]);
-  const [categoryName, setCategoryName] = useState<CategoryNameType | null>(
-    null
-  );
+  const [categoryNames, setCategoryNames] = useState<string[]>([]);
 
   const corMap: Record<string, string> = {
-    vermelho: "bg-red-500",
-    azul: "bg-blue-500",
-    amarelo: "bg-yellow-500",
-    rosa: "bg-pink-500",
-    roxo: "bg-purple-500",
+    1: "bg-red-500",
+    2: "bg-yellow-500",
+    3: "bg-green-500",
+    4: "bg-purple-500",
+    5: "bg-brown-500",
+    6: "bg-violet-500",
+    7: "bg-orange-500",
+    8: "bg-pink-500",
   };
+  
 
   useEffect(() => {
-    async function fetchStoreProductAndCategoryName() {
+    async function fetchStoreProductAndCategories() {
       try {
         const responseStore = await fetch(
-          `http://localhost:3001/lojas?id=${id}`
+          `http://127.0.0.1:8000/api/lojas/${id}/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         if (!responseStore.ok) throw new Error(`Erro ao buscar loja`);
         const dataStore: StoreType[] = await responseStore.json();
-        const lojaEncontrada = dataStore[0];
-        setStore(lojaEncontrada);
+        setStore(dataStore);
 
-        const produtosEncontrados = await Promise.all(
-          lojaEncontrada.produtos.map(async (idProduct) => {
-            const response = await fetch(
-              `http://localhost:3001/produtos?id=${idProduct}`
-            );
-            if (!response.ok) throw new Error(`Erro ao buscar produto`);
-            const data: ProductType[] = await response.json();
-            return data[0];
-          })
+        const responseProducts = await fetch(
+          `http://127.0.0.1:8000/api/lojas/${id}/produtos/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        setProducts(produtosEncontrados);
+        if (!responseProducts.ok) throw new Error(`Erro ao buscar produto`);
+        const dataProducts: ProductType[] = await responseProducts.json();
+        setProducts(dataProducts);
 
-        const responseCategory = await fetch(
-          `http://localhost:3001/categoria?id=${lojaEncontrada.categoria}`
+        const responseCategorisName = await fetch(
+          `http://127.0.0.1:8000/api/lojas/${id}/categorias/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        if (!responseCategory.ok) throw new Error(`Erro ao buscar categoria`);
-        const dataCategoryName: CategoryNameType[] =
-          await responseCategory.json();
-        setCategoryName(dataCategoryName[0]);
+        if (!responseCategorisName.ok) throw new Error("Erro ao buscar categoria");
+        const dataCategories: CategoryNameType = await responseCategorisName.json();
+        const categoryNames = dataCategories.map((category) => category.nome);
+        setCategoryNames(categoryNames);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       }
     }
 
-    if (id) fetchStoreProductAndCategoryName();
-  }, [id]);
+    if (id) fetchStoreProductAndCategories();
+  }, [id, token]);
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <div className="relative h-48 w-full bg-cover bg-center" style={{ backgroundImage: `url(${banner})` }}>
+      <div
+        className="relative h-48 w-full bg-cover bg-center"
+        style={{ backgroundImage: `url(${banner})` }}
+      >
         <Header />
         <img
-          src={loja}
+          src={logo}
           alt="Imagem da loja"
           className="w-24 h-24 rounded-full absolute bottom-[-2rem] left-1/2 transform -translate-x-1/2 border-4 border-white shadow-md"
         />
@@ -100,13 +121,17 @@ export function Store() {
         <div className="space-y-1">
           <h2 className="text-2xl font-semibold">{store?.nome}</h2>
           <div className="flex items-center gap-2 text-sm text-gray-600">
-            <div className={`w-3 h-3 rounded-full ${corMap[store?.cor]}`}></div>
-            <span>Setor {store?.cor} | {categoryName?.nome}</span>
+            <div
+              className={`w-3 h-3 rounded-full ${corMap[store?.setor ?? ""]}`}
+            ></div>
+            <span>
+              Setor {store?.setor} | {categoryNames.join(", ")}
+            </span>
           </div>
           <p className="text-sm text-gray-500">{store?.localizacao}</p>
           <div className="flex items-center gap-1 text-sm text-amber-600">
             <FaStar className="text-md" />
-            <span>4.5</span>
+            <span>{store?.nota_media ? store?.nota_media : 5 }</span>
           </div>
         </div>
 
@@ -122,12 +147,18 @@ export function Store() {
         <h3 className="text-lg font-semibold mb-3">Produtos</h3>
         <div className="grid grid-cols-2 gap-4">
           {products.map((product) => (
-            <CardProduct key={product.id} id={product.id} nome={product.nome} imagem={product.imagem} />
+            <CardProduct
+              key={product.id}
+              id={product.id}
+              nome={product.nome}
+              imagem={product.imagem}
+              heart
+            />
           ))}
         </div>
       </div>
 
-      <Menu />
+      <Menu type="Cliente" />
     </div>
   );
 }

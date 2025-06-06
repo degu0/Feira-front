@@ -2,8 +2,6 @@ import { Route, Routes } from "react-router-dom";
 import { Login } from "../pages/Login";
 import { PrivateRoute } from "./PrivateRoute";
 import { HomeWrapper } from "../wrappers/HomeWrapper";
-import { LojistaRoutes } from "./LojistaRoutes";
-import { ClienteRoutes } from "./ClienteRoutes";
 import { Profile } from "../pages/Profile";
 import { Product } from "../pages/Product";
 import { SearchResults } from "../pages/SearchResults";
@@ -17,6 +15,14 @@ import { Details } from "../pages/Store/Details";
 import { Wishlist } from "../pages/Wishlist";
 import { Assessment } from "../pages/Assessment";
 import { Comments } from "../pages/Assessment/Comments";
+import { SwitchProfiles } from "../pages/Profile/SwitchProfiles";
+import { AnalyticsDashboard } from "../pages/AnalyticsDashboard";
+import { ProductList } from "../pages/Product/ProductList";
+import { RegisterProduct } from "../pages/Product/RegisterProduct";
+import { Information } from "../pages/Store/Register/Information";
+import { Address } from "../pages/Store/Register/Address";
+import { Images } from "../pages/Store/Register/Images";
+import { Contact } from "../pages/Store/Register/Contact";
 
 export function AppRouter() {
   return (
@@ -29,34 +35,26 @@ export function AppRouter() {
       <Route path="/product/:id" element={<Product />} />
       <Route path="/store/:id" element={<Store />} />
       <Route path="/store/details/:id" element={<Details />} />
+      <Route path="/store/register/information" element={<Information />} />
+      <Route path="/store/register/address" element={<Address />} />
+      <Route path="/store/register/contact" element={<Contact />} />
+      <Route path="/store/register/images" element={<Images />} />
       <Route path="/assessment/:idStore" element={<Assessment />} />
       <Route path="/comments/:idStore" element={<Comments />} />
       <Route path="/category" element={<Category />} />
       <Route path="/category/:category" element={<ExploreCategory />} />
       <Route path="/search/:searchTerm" element={<SearchResults />} />
+      <Route path="/switchProfile" element={<SwitchProfiles />} />
       <Route path="/wishlist" element={<Wishlist />} />
+      <Route path="/productList" element={<ProductList />} />
+      <Route path="/product/register" element={<RegisterProduct />} />
+      <Route path="/dashboard" element={<AnalyticsDashboard />} />
 
       <Route
         path="/"
         element={
           <PrivateRoute>
             <HomeWrapper />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/lojista"
-        element={
-          <PrivateRoute roles={["lojista"]}>
-            <LojistaRoutes />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/cliente"
-        element={
-          <PrivateRoute roles={["Turista", "Local"]}>
-            <ClienteRoutes />
           </PrivateRoute>
         }
       />

@@ -22,22 +22,33 @@ export function Login() {
     setErro("");
 
     try {
-      const res = await fetch(
-        `http://localhost:3001/user?email=${email}&senha=${password}`
-      );
+      const res = await fetch("http://127.0.0.1:8000/token/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: email, password }),
+      });
+      const data = await res.json();
 
-      const data: UserType[] = await res.json();
+      if (res.ok && data) {
+        localStorage.setItem("token", data.access);
+        const resUser = await fetch(`http://127.0.0.1:8000/api/meu-perfil/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${data.access}`,
+          },
+        });
 
-      if (res.ok && data.length > 0) {
-        const apiUser = data[0];
-        const user = {
-          id: apiUser.id,
-          email: apiUser.email,
-          type: apiUser.tipoUsuario,
+        const users: UserType[] = await resUser.json();
+        const userInfo = users.cliente || users.lojista;
+        const dataUser = {
+          id: userInfo.id,
+          tipo: users.cliente ? "Cliente" : "Lojista",
         };
+        console.log(dataUser)
 
-        localStorage.setItem("user", JSON.stringify(user));
-        setUser(user);
+        localStorage.setItem("user", JSON.stringify(dataUser));
+        setUser(dataUser);
         navigate("/");
       } else {
         setErro("Email ou senha incorretos.");

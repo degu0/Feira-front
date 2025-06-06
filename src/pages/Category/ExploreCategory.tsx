@@ -13,40 +13,58 @@ type StoresType = {
   id: string;
   nome: string;
   categoria: string;
-  cor: string;
+  setor: string;
   localizacao: string;
 };
 
 export function ExploreCategory() {
+  const token = localStorage.getItem("token");
   const { category } = useParams();
   const [categoryName, setCategoryName] = useState<CategoryNameType>();
   const [stores, setStores] = useState<StoresType[]>([]);
 
   const corMap: Record<string, string> = {
-    vermelho: "bg-red-500",
-    azul: "bg-blue-500",
-    amarelo: "bg-yellow-500",
-    rosa: "bg-pink-500",
-    roxo: "bg-purple-500",
+    1: "bg-red-500",
+    2: "bg-yellow-500",
+    3: "bg-green-500",
+    4: "bg-purple-500",
+    5: "bg-brown-500",
+    6: "bg-violet-500",
+    7: "bg-orange-500",
+    8: "bg-pink-500",
   };
+  
 
   useEffect(() => {
     async function fetchCategoryNameAndStores() {
       try {
         const responseCategory = await fetch(
-          `http://localhost:3001/categoria?id=${category}`
+          `http://127.0.0.1:8000/api/categorias/${category}/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         if (!responseCategory.ok) {
           throw new Error(
             `Erro ao buscar categoria: ${responseCategory.status}`
           );
         }
-        const dataCategoryName: CategoryNameType =
-          await responseCategory.json();
-        setCategoryName(dataCategoryName[0]);
+        const dataCategoryName: CategoryNameType = await responseCategory.json();
+        setCategoryName(dataCategoryName);
 
         const responseStores = await fetch(
-          `http://localhost:3001/lojas?categoria=${category}`
+          `http://127.0.0.1:8000/api/categorias/${category}/lojas/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         if (!responseStores.ok) {
           throw new Error(`Erro ao buscar lojas: ${responseStores.status}`);
@@ -65,13 +83,13 @@ export function ExploreCategory() {
     if (category) {
       fetchCategoryNameAndStores();
     }
-  }, [category]);
+  }, [category, token]);
 
   return (
     <div className="h-full">
       <div className="h-full">
         <Header />
-        <h1 className="text-bold text-center text-xl my-4">
+        <h1 className="font-semibold text-center text-2xl my-4">
           {categoryName?.nome || "Categoria não encontrada"}
         </h1>
 
@@ -102,10 +120,10 @@ export function ExploreCategory() {
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <div
-                        className={`w-3 h-3 rounded-full ${corMap[store?.cor]}`}
+                        className={`w-3 h-3 rounded-full ${corMap[store?.setor]}`}
                       ></div>
                       <span>
-                        Setor {store?.cor} | {categoryName?.nome}
+                        Setor {store?.setor} | {categoryName?.nome}
                       </span>
                     </div>
                     <p className="text-sm text-gray-500">
@@ -122,7 +140,7 @@ export function ExploreCategory() {
           </div>
         )}
       </div>
-      <Menu />
+      <Menu type="Cliente" />
     </div>
   );
 }

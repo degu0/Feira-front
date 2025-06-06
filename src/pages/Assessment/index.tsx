@@ -6,14 +6,15 @@ import { Header } from "../../components/Header";
 
 type AssessmentType = {
   id: string;
-  usuario: string;
+  cliente: string;
   loja: string;
+  nota: string;
   comentario: string;
-  avaliacao: string;
   criacao: string;
 };
 
 export function Assessment() {
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const { idStore } = useParams();
   const [comments, setComments] = useState<AssessmentType[]>([]);
@@ -22,13 +23,20 @@ export function Assessment() {
     async function loadData() {
       try {
         const response = await fetch(
-          `http://localhost:3001/avaliacoes?loja=${idStore}`
+          `http://127.0.0.1:8000/api/lojas/${idStore}/avaliacoes/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        const data: AssessmentType[] = await response.json();
-        console.log(data);
+        const data:{ results: AssessmentType[] } = await response.json();
+        console.log(data.results);
 
         if (response.ok) {
-          setComments(data);
+          setComments(data.results);
         } else {
           console.log("Erro no response", data);
         }
@@ -38,7 +46,7 @@ export function Assessment() {
     }
 
     loadData();
-  }, [idStore]);
+  }, [idStore, token]);
 
   const transformationStringForDate = (dateIso: string) => {
     const data = new Date(dateIso);
@@ -65,13 +73,13 @@ export function Assessment() {
         {comments.map((comment) => (
           <div key={comment.id} className="border-b border-amber-600/25 p-4">
             <div className="flex items-center gap-1 mb-2">
-              {renderStars(comment.avaliacao)}
+              {renderStars(comment.nota)}
             </div>
             <p className="mb-3">{comment.comentario}</p>
             <div className="flex items-center gap-2">
               <img src={person} alt="User" className="rounded-full w-8 h-8" />
               <div className="flex flex-col gap-1">
-                <p className="font-medium">{comment.usuario}</p>
+                <p className="font-medium">{comment.cliente}</p>
                 <p className="text-gray-400 text-sm">
                   {transformationStringForDate(comment.criacao)}
                 </p>

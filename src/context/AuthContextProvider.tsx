@@ -2,7 +2,7 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 
 type UserType = {
   email: string;
-  type: string;
+  tipo: string;
 };
 
 type AuthContextType = {

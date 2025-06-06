@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { CardProduct } from "../../components/CardProduct";
 import { Menu } from "../../components/Menu";
 import map from "../../../public/map.png";
+import logo from "../../../public/loja.jpg";
 import { SearchInput } from "../../components/SearchInput";
-import { FaRegHeart, FaStar } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import loja from "../../../public/loja.jpg";
+import { HeartButton } from "../../components/HeartButton";
 
 type ProductType = {
   id: string;
@@ -22,52 +23,93 @@ type CategoryNameType = {
 type StoresType = {
   id: string;
   nome: string;
+  logo: string;
   categoria: number;
-  cor: string;
+  setor: string;
   localizacao: string;
+  nota_media: number;
 };
 
 export function HomeCliente() {
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const idCliente = user.idCliente;
+
   const [products, setProducts] = useState<ProductType[]>([]);
   const [scrolled, setScrolled] = useState(false);
   const [categories, setCategories] = useState<Record<number, string>>({});
   const [stores, setStores] = useState<StoresType[]>([]);
 
   const corMap: Record<string, string> = {
-    vermelho: "bg-red-500",
-    azul: "bg-blue-500",
-    amarelo: "bg-yellow-500",
-    rosa: "bg-pink-500",
-    roxo: "bg-purple-500",
+    1: "bg-red-500",
+    2: "bg-yellow-500",
+    3: "bg-green-500",
+    4: "bg-purple-500",
+    5: "bg-brown-500",
+    6: "bg-violet-500",
+    7: "bg-orange-500",
+    8: "bg-pink-500",
   };
 
   useEffect(() => {
     async function loadData() {
       try {
-        const responseProduct = await fetch("http://localhost:3001/produtos");
-        const dataProduct: ProductType[] = await responseProduct.json();
+        const responseProduct = await fetch(
+          "http://127.0.0.1:8000/api/produtos/",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const dataProduct: { results: ProductType[] } =
+          await responseProduct.json();
 
-        if (!responseProduct.ok || !Array.isArray(dataProduct)) {
+        if (!responseProduct.ok || !Array.isArray(dataProduct.results)) {
           throw new Error("Invalid products response");
         }
-        setProducts(dataProduct);
+        setProducts(dataProduct.results);
 
-        const responseStores = await fetch("http://localhost:3001/lojas");
-        const dataStores: StoresType[] = await responseStores.json();
+        const responseStores = await fetch("http://127.0.0.1:8000/api/lojas/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const dataStores: { results: StoresType[] } =
+          await responseStores.json();
 
-        if (!responseStores.ok || !Array.isArray(dataStores)) {
+        if (!responseStores.ok || !Array.isArray(dataStores.results)) {
           throw new Error("Invalid stores response");
         }
-        setStores(dataStores);
+        console.log(dataStores.results);
 
-        const categoryIds = [...new Set(dataProduct.map((p) => p.categoria))];
-        const categoryPromises = categoryIds.map(async (id) => {
+        setStores(dataStores.results);
+
+        const allCategoryIds = [
+          ...new Set([
+            ...dataProduct.results.flatMap((p) => p.categorias),
+            ...dataStores.results.flatMap((s) => s.categorias),
+          ]),
+        ];
+
+        const categoryPromises = allCategoryIds.map(async (id) => {
           const response = await fetch(
-            `http://localhost:3001/categoria?id=${id}`
+            `http://127.0.0.1:8000/api/categorias/${id}/`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
           );
           if (!response.ok) throw new Error(`Failed to fetch category ${id}`);
-          const data: CategoryNameType[] = await response.json();
-          return { id, name: data[0]?.nome || "Unknown" };
+          const data: CategoryNameType = await response.json();
+          return { id, name: data.nome || "Unknown" };
         });
 
         const categoryResults = await Promise.all(categoryPromises);
@@ -83,7 +125,7 @@ export function HomeCliente() {
     }
 
     loadData();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     function handleScroll() {
@@ -120,7 +162,7 @@ export function HomeCliente() {
             >
               <div className="mr-5">
                 <img
-                  src={loja}
+                  src={logo}
                   alt="Imagem de perfil"
                   className="w-20 h-20 rounded-[5px]"
                 />
@@ -128,21 +170,26 @@ export function HomeCliente() {
               <div className="flex-1 border-b border-amber-600/25 py-2">
                 <div className="flex justify-between items-center">
                   <p className="text-lg font-semibold">{store.nome}</p>
-                  <FaRegHeart className="text-amber-600" />
+                  <HeartButton
+                    idCliente={idCliente}
+                    id={store.id}
+                    tipo="Loja"
+                  />
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <div
-                      className={`w-3 h-3 rounded-full ${corMap[store?.cor]}`}
+                      className={`w-3 h-3 rounded-full ${corMap[store?.setor]}`}
                     ></div>
                     <span>
-                      Setor {store?.cor} | {categories[store.categoria]}
+                      Setor {store?.cor} |{" "}
+                      {store.categorias.map((id) => categories[id]).join(", ")}
                     </span>
                   </div>
                   <p className="text-sm text-gray-500">{store?.localizacao}</p>
                   <div className="flex items-center gap-1 text-sm text-amber-600">
                     <FaStar className="text-md" />
-                    <span>4.5</span>
+                    <span>{store?.nota_media ? store?.nota_media : 5}</span>
                   </div>
                 </div>
               </div>
@@ -161,13 +208,14 @@ export function HomeCliente() {
                   categories[prod.categoria] || "Categoria desconhecida"
                 }
                 imagem={prod.imagem}
+                heart
               />
             ))}
           </div>
         </div>
       </div>
 
-      <Menu />
+      <Menu type="Cliente" />
     </div>
   );
 }

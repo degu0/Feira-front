@@ -1,32 +1,33 @@
 import { NavLink } from "react-router-dom";
-import { FaRegHeart } from "react-icons/fa";
+import { HeartButton } from "./HeartButton";
+import jeans from "../../public/Jeans.jpg";
 
 type CardProductProps = {
   id: string;
   nome: string;
   categoria?: string;
-  imagem: string;
+  // imagem: string;
+  heart: boolean;
 };
 
 export const CardProduct: React.FC<CardProductProps> = ({
   id,
   nome,
   categoria,
-  imagem
+  heart,
 }) => {
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const idCliente = user.idCliente;
+
   return (
-    <NavLink
-      to={`/product/${id}`}
-      className="w-44 h-64 relative block"
-    >
+    <NavLink to={`/product/${id}`} className="w-44 h-64 relative block">
       <img
-        src={imagem}
+        src={jeans}
         alt={nome}
         className="w-44 h-44 absolute top-0 left-0 rounded-tl-[5px] rounded-tr-[5px] object-cover"
       />
 
       <div className="w-44 h-64 absolute top-0 left-0 rounded-[5px] border border-amber-600/25 pointer-events-none" />
-
 
       <div className="absolute top-[178px] left-3 text-zinc-800 text-base font-semibold leading-6">
         {nome}
@@ -36,9 +37,12 @@ export const CardProduct: React.FC<CardProductProps> = ({
         {categoria}
       </div>
 
-      <div className="w-7 h-10 absolute top-2 right-2 overflow-hidden">
-          <FaRegHeart className="text-amber-600 text-2xl" />
-      </div>
+      <HeartButton
+        idCliente={idCliente}
+        id={id}
+        jáFavoritado={heart}
+        tipo="Produto"
+      />
     </NavLink>
   );
 };

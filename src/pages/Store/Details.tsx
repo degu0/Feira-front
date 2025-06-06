@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Menu } from "../../components/Menu";
-import { FaInstagram, FaRegStar } from "react-icons/fa";
+import { FaInstagram, FaRegStar, FaWhatsapp } from "react-icons/fa";
 import loja from "../../../public/loja.jpg";
 import {
   IoCubeOutline,
@@ -11,6 +11,7 @@ import {
 import { MdOutlineWatchLater } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
 import { Header } from "../../components/Header";
+import { TbWorld } from "react-icons/tb";
 
 type StoreType = {
   id: string;
@@ -19,13 +20,16 @@ type StoreType = {
   categoria: string;
   lojista: string;
   localizacao: string;
-  redes_sociais: string;
   horario_funcionamento: string;
   cor: string;
   produtos: string[];
+  WhatsApp: string;
+  Website: string;
+  Instagram: string;
 };
 
 export function Details() {
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const { id } = useParams();
   const [store, setStore] = useState<StoreType | null>(null);
@@ -34,14 +38,20 @@ export function Details() {
     async function fetchStoreDetails() {
       try {
         const responseStore = await fetch(
-          `http://localhost:3001/lojas?id=${id}`
+          `http://127.0.0.1:8000/api/lojas/${id}/`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         if (!responseStore.ok) {
           throw new Error(`Erro ao buscar lojas: ${responseStore.status}`);
         }
         const dataStore: StoreType[] = await responseStore.json();
-        const lojaEncontrada = dataStore[0];
-        setStore(lojaEncontrada);
+        setStore(dataStore);
       } catch (error) {
         console.error("Erro ao buscar categoria e loja:", error);
       }
@@ -50,7 +60,7 @@ export function Details() {
     if (id) {
       fetchStoreDetails();
     }
-  }, [id]);
+  }, [id, token]);
 
   return (
     <div className="bg-gray-200 min-h-screen">
@@ -113,16 +123,30 @@ export function Details() {
               <h2 className="font-semibold text-xl">Redes Sociais</h2>
               <li className="flex justify-between items-center">
                 <div className="flex items-center gap-5">
+                  <FaWhatsapp  className="text-amber-600 text-2xl" />
+                  <p>Whatsapp</p>
+                </div>
+                <p className="text-amber-600">{store?.WhatsApp}</p>
+              </li>
+              <li className="flex justify-between items-center">
+                <div className="flex items-center gap-5">
                   <FaInstagram className="text-amber-600 text-2xl" />
                   <p>Instagram</p>
                 </div>
-                <p className="text-amber-600">{store?.redes_sociais}</p>
+                <p className="text-amber-600">{store?.Instagram}</p>
+              </li>
+              <li className="flex justify-between items-center">
+                <div className="flex items-center gap-5">
+                  <TbWorld  className="text-amber-600 text-2xl" />
+                  <p>WebSite</p>
+                </div>
+                <p className="text-amber-600">{store?.Website}</p>
               </li>
             </div>
           </ul>
         </div>
       </div>
-      <Menu />
+      <Menu type="Cliente" />
     </div>
   );
 }
