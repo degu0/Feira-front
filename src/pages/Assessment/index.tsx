@@ -71,15 +71,15 @@ export function Assessment() {
 
       <div className="bg-white flex-1">
         {comments.map((comment) => (
-          <div key={comment.id} className="border-b border-amber-600/25 p-4">
+          <div key={comment.id} className="border-b border-amber-600/25 p-6">
             <div className="flex items-center gap-1 mb-2">
               {renderStars(comment.nota)}
             </div>
             <p className="mb-3">{comment.comentario}</p>
             <div className="flex items-center gap-2">
-              <img src={person} alt="User" className="rounded-full w-8 h-8" />
+              <img src={person} alt="User" className="rounded-full w-10 h-10" />
               <div className="flex flex-col gap-1">
-                <p className="font-medium">{comment.cliente}</p>
+                <p className="font-medium text-zinc-800">{comment.cliente}</p>
                 <p className="text-gray-400 text-sm">
                   {transformationStringForDate(comment.criacao)}
                 </p>

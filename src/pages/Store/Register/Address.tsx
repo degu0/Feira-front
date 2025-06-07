@@ -58,7 +58,7 @@ export function Address() {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center px-4 py-6 bg-white">
-      <img src={logo} alt="Logo do aplicativo" className="w-50 mb-15" />
+      <img src={logo} alt="Logo do aplicativo" className="w-52 mb-15" />
       <form
         onSubmit={handleLogin}
         className="w-full max-w-md flex flex-col gap-5"
@@ -72,7 +72,7 @@ export function Address() {
             type="text"
             value={rua}
             onChange={(e) => setRua(e.target.value)}
-            className="w-full mb-3 p-3 border border-orange-500 rounded-md"
+            className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600"
             placeholder="Escreva o nome da rua"
           />
         </div>
@@ -84,7 +84,7 @@ export function Address() {
             type="number"
             value={numeroLoja}
             onChange={(e) => setNumeroLoja(e.target.value)}
-            className="w-full mb-3 p-3 border border-orange-500 rounded-md"
+            className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600"
             placeholder="Escreva o numoro da loja/box"
           />
         </div>
@@ -96,7 +96,7 @@ export function Address() {
             type="text"
             value={quadra}
             onChange={(e) => setQuadra(e.target.value)}
-            className="w-full mb-3 p-3 border border-orange-500 rounded-md"
+            className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600"
             placeholder="Escreva o numero da quadro"
           />
         </div>
@@ -107,7 +107,7 @@ export function Address() {
             id="setor"
             value={setor}
             onChange={(e) => setSetor(e.target.value)}
-            className="w-full mb-3 p-3 border border-orange-500 rounded-md"
+            className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600"
           >
             <option value="">Selecione</option>
             {setores.map((setor) => (
@@ -117,12 +117,14 @@ export function Address() {
             ))}
           </select>
         </div>
-        <button
-          type="submit"
-          className="w-full bg-orange-500 text-white py-3 rounded-full mt-4"
-        >
-          Próximo
-        </button>
+        <div className="flex items-center justify-center">
+          <button
+            type="submit"
+            className="w-64 h-11 relative bg-amber-600 text-white rounded-[100px] text-lg font-medium mb-2"
+          >
+            Próximo
+          </button>
+        </div>
       </form>
 
       <div className="flex items-center justify-center gap-4 fixed bottom-10 left-40">

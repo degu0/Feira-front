@@ -80,17 +80,24 @@ export function SearchResults() {
         const allCategoryIds = [
           ...new Set([
             ...data.produtos.map((p: ProductType) => p.categoria),
-            ...(data.lojas?.flatMap((l: StoreType) => l.categorias) || []),
+            ...data.lojas.flatMap((l: StoreType) => l.categorias),
           ]),
         ];
 
         const categoryPromises = allCategoryIds.map(async (id: number) => {
           const response = await fetch(
-            `http://127.0.0.1:8000/api/categoria?id=${id}`
+            `http://127.0.0.1:8000/api/categorias/${id}/`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
           );
           if (!response.ok) throw new Error(`Failed to fetch category ${id}`);
-          const categoryData: CategoryType[] = await response.json();
-          return { id, name: categoryData[0]?.nome || "Desconhecida" };
+          const categoryData: CategoryType[] = await response.json();          
+          return { id, name: categoryData?.nome || "Desconhecida" };
         });
 
         const categoryResults = await Promise.all(categoryPromises);
@@ -112,7 +119,7 @@ export function SearchResults() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <header className="sticky top-0 z-10 bg-white px-4 py-3 shadow-sm">
+      <header className="sticky top-0 z-10 bg-gray-200 px-4 py-3 shadow-sm">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate(-1)}
@@ -134,7 +141,7 @@ export function SearchResults() {
           </div>
         ) : products.length > 0 ? (
           <>
-            <h1 className="text-lg font-semibold px-4 py-3 text-gray-800">
+            <h1 className="text-xl font-semibold px-4 py-3 text-zinc-800">
               Resultados para "{query}"
             </h1>
             <div className="grid grid-cols-2 gap-4 px-4">
@@ -154,7 +161,7 @@ export function SearchResults() {
           </>
         ) : stores.length > 0 ? (
           <>
-            <h1 className="text-lg font-semibold px-4 py-3 text-gray-800">
+            <h1 className="text-xl font-semibold px-4 py-3 text-zinc-800">
               Lojas encontradas para "{query}"
             </h1>
             {stores.slice(0, 3).map((store) => (
@@ -196,7 +203,7 @@ export function SearchResults() {
                     <p className="text-sm text-gray-500">{store.localizacao}</p>
                     <div className="flex items-center gap-1 text-sm text-amber-600">
                       <FaStar className="text-md" />
-                      <span>{store.nota_media ?? 5}</span>
+                      <span className="text-zinc-800">{store.nota_media ?? 5}</span>
                     </div>
                   </div>
                 </div>

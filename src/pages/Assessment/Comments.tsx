@@ -54,7 +54,7 @@ export function Comments() {
           className="bg-white rounded-lg p-6 w-full max-w-md flex flex-col gap-10 shadow-md h-screen"
         >
           <div className="flex flex-col gap-6 mt-15">
-            <div className="flex justify-center gap-1">
+            <div className="flex justify-center gap-5">
               {[1, 2, 3, 4, 5].map((star) => (
                 <label key={star}>
                   <input
@@ -92,12 +92,14 @@ export function Comments() {
               />
             </div>
 
+            <div className="flex items-center justify-center">
             <button
               type="submit"
-              className="w-full h-11 bg-amber-600 rounded-[100px] text-white font-medium hover:bg-amber-700 transition-colors"
+              className="w-64 h-11 relative bg-amber-600 text-white rounded-[100px] text-lg font-medium mb-2"
             >
-              Enviar Avaliação
+              Avaliar
             </button>
+            </div>
           </div>
         </form>
       </div>

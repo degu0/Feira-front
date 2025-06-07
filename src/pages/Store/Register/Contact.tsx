@@ -91,7 +91,7 @@ export function Contact() {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center px-4 py-6 bg-white text-lg">
-      <img src={appLogo} alt="Logo do aplicativo" className="w-50 mb-15" />
+      <img src={appLogo} alt="Logo do aplicativo" className="w-52 mb-15" />
 
       <form
         onSubmit={handleSubmit}
@@ -107,7 +107,7 @@ export function Contact() {
             ref={whatsappRef}
             value={whatsapp}
             onChange={(e) => setWhatsapp(e.target.value)}
-            className="w-full p-3 border border-orange-500 rounded-md"
+            className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600"
             placeholder="(99) 99999-9999"
           />
         </div>
@@ -120,7 +120,7 @@ export function Contact() {
             ref={instagramRef}
             value={instagram}
             onChange={(e) => setInstagram(e.target.value)}
-            className="w-full p-3 border border-orange-500 rounded-md"
+            className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600"
             placeholder="@usuario"
           />
         </div>
@@ -133,17 +133,19 @@ export function Contact() {
             ref={websiteRef}
             value={website}
             onChange={(e) => setWebsite(e.target.value)}
-            className="w-full p-3 border border-orange-500 rounded-md"
+            className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600"
             placeholder="https://exemplo.com"
           />
         </div>
 
-        <button
-          type="submit"
-          className="bg-orange-500 text-white w-full py-3 rounded-full"
-        >
-          Continuar
-        </button>
+        <div className="flex items-center justify-center">
+          <button
+            type="submit"
+            className="w-64 h-11 relative bg-amber-600 text-white rounded-[100px] text-lg font-medium mb-2"
+          >
+            Próximo
+          </button>
+        </div>
       </form>
 
       <div className="flex items-center justify-center gap-4 mt-6 fixed bottom-10 left-40">

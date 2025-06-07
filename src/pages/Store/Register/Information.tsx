@@ -94,7 +94,7 @@ export function Information() {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center px-4 py-6 bg-white">
-      <img src={logo} alt="Logo do aplicativo" className="w-50 mb-15" />
+      <img src={logo} alt="Logo do aplicativo" className="w-52 mb-15" />
       <form
         onSubmit={handleLogin}
         className="w-full max-w-md flex flex-col gap-3"
@@ -108,8 +108,7 @@ export function Information() {
             type="text"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
-            className="w-full mb-3 p-3 border border-orange-500 rounded-md"
-            placeholder="Escreva nome da loja"
+            className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600"
           />
         </div>
 
@@ -119,7 +118,7 @@ export function Information() {
             id="category"
             value={storeCategory}
             onChange={(e) => setStoreCategory(e.target.value)}
-            className="w-full mb-3 p-3 border border-orange-500 rounded-md"
+            className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600 text-zinc-800"
           >
             <option value="" disabled>
               Selecione uma categoria
@@ -139,9 +138,9 @@ export function Information() {
             type="text"
             ref={horarioRef}
             value={horarioFuncionamento}
-            onChange={() => {}} // valor controlado pela máscara
+            onChange={() => {}}
             placeholder="00:00 - 00:00"
-            className="w-full mb-3 p-3 border border-orange-500 rounded-md"
+            className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600"
           />
         </div>
 
@@ -151,17 +150,18 @@ export function Information() {
             id="descricao"
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
-            placeholder="Escreva sua avaliação aqui..."
             className="border border-amber-600 rounded-lg p-3 min-h-[100px]"
           />
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-orange-500 text-white py-3 rounded-full mt-4"
-        >
-          Próximo
-        </button>
+        <div className="flex items-center justify-center mt-10">
+          <button
+            type="submit"
+            className="w-64 h-11 relative bg-amber-600 text-white rounded-[100px] text-lg font-medium mb-2"
+          >
+            Próximo
+          </button>
+        </div>
       </form>
 
       <div className="flex items-center justify-center gap-4 mt-6 fixed bottom-10 left-40">

@@ -2,6 +2,7 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { Header } from "../../components/Header";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FiCamera } from "react-icons/fi";
 
 type CategoryType = {
   id: string;
@@ -110,7 +111,7 @@ export function RegisterProduct() {
               type="text"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
-              className="w-full p-3 border border-orange-500 rounded-md"
+              className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600"
             />
           </div>
 
@@ -122,7 +123,7 @@ export function RegisterProduct() {
               id="categoria"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full p-3 border border-orange-500 rounded-md"
+              className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600"
             >
               <option value="">Selecione</option>
               {categories.map((cat) => (
@@ -145,26 +146,25 @@ export function RegisterProduct() {
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
             placeholder="Escreva sua avaliação aqui..."
-            className="border border-amber-600 rounded-lg p-3 min-h-[180px]"
+            className="border border-amber-600 rounded-lg p-3 min-h-[100px]"
           />
         </div>
 
         <div className="flex flex-col gap-2 border-b border-amber-600 pb-5">
           <h2 className="text-xl font-semibold">Adicionar imagem</h2>
-          <input
-            id="imagem"
-            type="file"
-            onChange={(e) =>
-              setImagem(e.target.files ? e.target.files[0] : null)
-            }
-            className="block w-full text-sm text-gray-500
-              file:mr-4 file:py-2 file:px-4
-              file:rounded-lg file:border-0
-              file:text-sm file:font-semibold
-              file:bg-orange-100 file:text-orange-700
-              hover:file:bg-orange-200
-            "
-          />
+          <div className="relative w-24 h-24">
+            <input
+              id="imagem"
+              type="file"
+              onChange={(e) =>
+                setImagem(e.target.files ? e.target.files[0] : null)
+              }
+              className="absolute inset-0 opacity-0 cursor-pointer z-10"
+            />
+            <div className="w-full h-full bg-zinc-300 rounded-lg flex items-center justify-center hover:bg-orange-200 transition-colors">
+              <FiCamera className="text-white text-5xl" />
+            </div>
+          </div>
         </div>
         <div className="flex flex-col gap-3">
           <h2 className="text-xl font-semibold">Informcações Adicionais</h2>
@@ -177,7 +177,7 @@ export function RegisterProduct() {
               type="text"
               value={composicao}
               onChange={(e) => setComposicao(e.target.value)}
-              className="w-full p-3 border border-orange-500 rounded-md"
+              className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600"
             />
           </div>
 
@@ -189,7 +189,7 @@ export function RegisterProduct() {
               id="cor"
               value={cor}
               onChange={(e) => setCor(e.target.value)}
-              className="w-full p-3 border border-orange-500 rounded-md"
+              className="min-w-60 mb-3 px-4 py-2 rounded-lg outline-1 outline-offset-[-0.50px] outline-amber-600"
             >
               <option value="">Selecione</option>
               {optionColors.map((color, index) => (
@@ -202,11 +202,11 @@ export function RegisterProduct() {
         </div>
       </form>
 
-      <div className="fixed bottom-0 left-0 w-full p-4">
+      <div className="fixed bottom-0 left-15 w-full p-4">
         <button
           type="submit"
           onClick={handleProduto}
-          className="bg-orange-500 text-white w-full py-3 rounded-full text-lg font-semibold"
+          className="w-64 h-11 relative bg-amber-600 text-white rounded-[100px] text-lg font-medium mb-2"
         >
           Cadastrar
         </button>

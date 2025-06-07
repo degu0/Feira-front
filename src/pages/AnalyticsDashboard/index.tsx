@@ -59,20 +59,21 @@ export function AnalyticsDashboard() {
   }, [token]);
 
   return (
-    <div className="bg-gray-200 min-h-screen">
+    <div className="bg-gray-200 min-h-screen text-zinc-800">
       <div
         className="relative h-32 w-full bg-cover bg-center"
         style={{ backgroundImage: `url(${store?.banner})` }}
       >
         <img
           src={store?.logo}
-          alt="Logo da loja"
-          className="w-24 h-24 rounded-full absolute bottom-[-2rem] left-1/2 transform -translate-x-1/2 border-4 border-white shadow-md bg-white object-cover"
+          alt="Imagem da loja"
+          className="w-32 h-32 rounded-lg absolute bottom-[-2rem] left-1/2 transform -translate-x-1/2 shadow-md"
         />
       </div>
 
-      <div className="w-full h-20 bg-white flex items-center justify-center">
-        <h1 className="text-2xl font-semibold mt-3">Relatórios</h1>
+      <div className="w-full h-20 mt-2 bg-white flex items-center justify-center 
+      rounded-[5px] shadow-[0px_2px_2px_0px_rgba(0,0,0,0.25)]">
+        <h1 className="text-2xl font-semibold mt-5">Relatórios</h1>
       </div>
 
       <div className="px-5 mt-5">

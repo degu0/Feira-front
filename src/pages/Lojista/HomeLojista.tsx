@@ -131,22 +131,22 @@ export function HomeLojista() {
             </span>
           </div>
           <p className="text-sm text-gray-500">{store?.localizacao}</p>
-          <div className="flex items-center gap-1 text-sm text-amber-600">
-            <FaStar className="text-md" />
-            <span>4.5</span>
-          </div>
         </div>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto font-medium">
         <div className="flex gap-4 p-4 whitespace-nowrap">
-          <div className="min-w-[200px] bg-white rounded shadow p-5">
-            <h3>Visualização do Perfil</h3>
-            <p className="text-sm text-gray-500">(por semestre)</p>
+          <div className="min-w-[200px] bg-white rounded shadow p-5 flex flex-col gap-5">
+            <div>
+              <h3 className="text-zinc-800">Visualização do Perfil</h3>
+              <p className="text-sm text-gray-500">(por semestre)</p>
+            </div>
             <h1 className="text-4xl text-green-600 text-end">1102</h1>
           </div>
-          <div className="min-w-[200px] bg-white rounded shadow p-5">
-            <h3>Quantidade de Interações</h3>
-            <p className="text-sm text-gray-500">(por semestre)</p>
+          <div className="min-w-[200px] bg-white rounded shadow p-5  flex flex-col gap-5">
+            <div>
+              <h3>Quantidade de Interações</h3>
+              <p className="text-sm text-gray-500">(por semestre)</p>
+            </div>
             <h1 className="text-4xl text-red-600 text-end">842</h1>
           </div>
         </div>

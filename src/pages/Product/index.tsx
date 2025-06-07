@@ -138,7 +138,7 @@ export function Product() {
           <div className="fixed bottom-0 left-0 w-full flex justify-center mb-5">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-amber-600 w-[90%] rounded-[100px] p-5 text-white"
+              className="w-66 h-12 relative bg-amber-600 text-white rounded-[100px] text-lg font-medium mb-2"
             >
               Ver a localização da loja
             </button>
