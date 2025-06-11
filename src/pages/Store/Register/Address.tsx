@@ -28,9 +28,9 @@ export function Address() {
             Authorization: `Bearer ${token}`,
           },
         });
-        const data: { results: SetoresType[] } = await response.json();
-        if (response.ok && Array.isArray(data.results)) {
-          setSetores(data.results);
+        const data:  SetoresType[]  = await response.json();
+        if (response.ok && Array.isArray(data)) {
+          setSetores(data);
         } else {
           console.error("Erro na resposta da API:", data);
         }

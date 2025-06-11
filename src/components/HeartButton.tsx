@@ -1,42 +1,55 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+
 
 type HeartButtonProps = {
   id: string;
-  idCliente: string;
-  jáFavoritado?: boolean;
-  tipo: string;
+  favoritedInitially?: boolean;
+  tipo: "Loja" | "Produto";
+  hide?: boolean;
 };
 
 export const HeartButton: React.FC<HeartButtonProps> = ({
   id,
-  idCliente,
-  jáFavoritado = false,
+  favoritedInitially,
   tipo,
+  hide,
 }) => {
+  if (hide) return null;
+
   const token = localStorage.getItem("token");
-  const [favoritado, setFavoritado] = useState(jáFavoritado);
+  const userData = localStorage.getItem("user");
+  const userId = userData ? JSON.parse(userData)?.id : null;
+
+  const [favoritado, setFavoritado] = useState(favoritedInitially);
+
+  useEffect(() => {
+    setFavoritado(favoritedInitially);
+  }, [favoritedInitially]);
 
   const handleFavoritar = async (e: React.MouseEvent) => {
     e.preventDefault();
+    if (!token || !userId) return;
 
-    if (!token || !idCliente) return;
+    const baseUrlPost =
+      tipo === "Loja"
+        ? `http://127.0.0.1:8000/api/lojas_favoritas/`
+        : `http://127.0.0.1:8000/api/produtos_favoritos/`;
+    const baseUrlDelete =
+      tipo === "Loja"
+        ? `http://127.0.0.1:8000/api/clientes/${userId}/lojas_favoritas/${id}/`
+        : `http://127.0.0.1:8000/api/clientes/${userId}/produtos_favoritos/${id}/`;
 
     try {
-      const favoritoUrl =
-        tipo === "Loja"
-          ? "http://127.0.0.1:8000/api/lojas_favoritos/"
-          : "http://127.0.0.1:8000/api/produtos_favoritos/";
-
       if (!favoritado) {
-        const response = await fetch(favoritoUrl, {
+        const response = await fetch(baseUrlPost, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            cliente: idCliente,
+            cliente: userId,
             ...(tipo === "Loja" ? { loja: id } : { produto: id }),
           }),
         });
@@ -49,12 +62,7 @@ export const HeartButton: React.FC<HeartButtonProps> = ({
 
         setFavoritado(true);
       } else {
-        const deleteUrl =
-          tipo === "Loja"
-            ? `http://127.0.0.1:8000/api/lojas_favoritos/${id}`
-            : `http://127.0.0.1:8000/api/produtos_favoritos/${id}`;
-
-        const response = await fetch(deleteUrl, {
+        const response = await fetch(baseUrlDelete, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -70,12 +78,12 @@ export const HeartButton: React.FC<HeartButtonProps> = ({
         setFavoritado(false);
       }
     } catch (error) {
-      console.error("Erro geral ao favoritar/desfavoritar:", error);
+      console.error("Erro ao processar favorito:", error);
     }
   };
 
   return (
-    <button onClick={handleFavoritar} className="absolute top-2 right-2 z-10">
+    <button onClick={handleFavoritar} className="absolute top-2 right-2 z-0">
       {favoritado ? (
         <FaHeart className="text-amber-600 text-2xl" />
       ) : (

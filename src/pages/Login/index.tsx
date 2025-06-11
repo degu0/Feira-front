@@ -45,7 +45,6 @@ export function Login() {
           id: userInfo.id,
           tipo: users.cliente ? "Cliente" : "Lojista",
         };
-        console.log(dataUser);
 
         localStorage.setItem("user", JSON.stringify(dataUser));
         setUser(dataUser);

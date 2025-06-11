@@ -6,18 +6,25 @@ import { Header } from "../../components/Header";
 
 type AssessmentType = {
   id: string;
-  cliente: string;
+  cliente: string; // ID do cliente
   loja: string;
   nota: string;
   comentario: string;
   criacao: string;
 };
 
+type ClienteType = {
+  id: string;
+  nome: string;
+};
+
 export function Assessment() {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const { idStore } = useParams();
+
   const [comments, setComments] = useState<AssessmentType[]>([]);
+  const [clientes, setClientes] = useState<Record<string, string>>({}); // id -> nome
 
   useEffect(() => {
     async function loadData() {
@@ -32,16 +39,44 @@ export function Assessment() {
             },
           }
         );
-        const data:{ results: AssessmentType[] } = await response.json();
-        console.log(data.results);
 
-        if (response.ok) {
-          setComments(data.results);
-        } else {
+        const data: AssessmentType[] = await response.json();
+
+        if (!response.ok) {
           console.log("Erro no response", data);
+          return;
         }
+
+        setComments(data);
+
+
+        const clienteIds = Array.from(new Set(data.map((c) => c.cliente)));
+
+
+        const clienteData = await Promise.all(
+          clienteIds.map(async (id) => {
+            const res = await fetch(`http://127.0.0.1:8000/api/clientes/${id}/`, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            if (!res.ok) return { id, nome: "Desconhecido" };
+
+            const json: ClienteType = await res.json();
+            return { id: json.id, nome: json.nome };
+          })
+        );
+
+
+        const clienteMap: Record<string, string> = {};
+        clienteData.forEach((c) => {
+          clienteMap[c.id] = c.nome;
+        });
+
+        setClientes(clienteMap);
       } catch (error) {
-        console.error("Erro ao buscar dados da api", error);
+        console.error("Erro ao buscar dados da API", error);
       }
     }
 
@@ -79,7 +114,9 @@ export function Assessment() {
             <div className="flex items-center gap-2">
               <img src={person} alt="User" className="rounded-full w-10 h-10" />
               <div className="flex flex-col gap-1">
-                <p className="font-medium text-zinc-800">{comment.cliente}</p>
+                <p className="font-medium text-zinc-800">
+                  {clientes[comment.cliente] || "Carregando..."}
+                </p>
                 <p className="text-gray-400 text-sm">
                   {transformationStringForDate(comment.criacao)}
                 </p>

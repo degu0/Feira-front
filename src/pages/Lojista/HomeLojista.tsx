@@ -1,4 +1,3 @@
-import { FaStar } from "react-icons/fa";
 import { CardProduct } from "../../components/CardProduct";
 import { Menu } from "../../components/Menu";
 import { useEffect, useState } from "react";
@@ -39,23 +38,26 @@ export function HomeLojista() {
   const [store, setStore] = useState<StoreType | null>(null);
   const [products, setProducts] = useState<ProductType[]>([]);
   const [categoryNames, setCategoryNames] = useState<string[]>([]);
+  const [quantidadeDeFavoritos, setQuantidadeFavoritos] = useState("")
 
-  const corMap: Record<string, string> = {
-    1: "bg-red-500",
-    2: "bg-yellow-500",
-    3: "bg-green-500",
-    4: "bg-purple-500",
-    5: "bg-brown-500",
-    6: "bg-violet-500",
-    7: "bg-orange-500",
-    8: "bg-pink-500",
+  const corMap: Record<number, string> = {
+    1: "bg-red-500",      
+    2: "bg-yellow-500",   
+    3: "bg-green-500",    
+    4: "bg-purple-500",   
+    5: "bg-amber-800",
+    6: "bg-violet-400",   
+    7: "bg-orange-500",   
+    8: "bg-pink-500",     
+    9: "bg-blue-500",     
+    10: "bg-white",       
   };
 
   useEffect(() => {
     async function fetchStoreProductAndCategories() {
       try {
         const responseStore = await fetch(
-          `http://127.0.0.1:8000/api/lojas/2/`,
+          `http://127.0.0.1:8000/api/lojistas/${idLojista}/loja/`,
           {
             method: "GET",
             headers: {
@@ -65,29 +67,22 @@ export function HomeLojista() {
           }
         );
         if (!responseStore.ok) throw new Error(`Erro ao buscar loja`);
-        const dataStore: StoreType[] = await responseStore.json();
+        const dataStore: StoreType = await responseStore.json();
+        console.log(dataStore);
+        
+        
         setStore(dataStore);
-
-        const responseProducts = await fetch(
-          `http://127.0.0.1:8000/api/lojas/2/produtos/`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (!responseProducts.ok) throw new Error(`Erro ao buscar produto`);
-        const dataProducts: ProductType[] = await responseProducts.json();
-        setProducts(dataProducts);
-
+  
+        const idStore = {
+          id: dataStore.id,
+        };
+        localStorage.setItem("store", JSON.stringify(idStore));
+  
         const responseCategorisName = await fetch(
-          `http://127.0.0.1:8000/api/lojas/2/categorias/`,
+          `http://127.0.0.1:8000/api/lojas/${dataStore.id}/categorias/`,
           {
             method: "GET",
             headers: {
-              "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
           }
@@ -98,16 +93,47 @@ export function HomeLojista() {
           await responseCategorisName.json();
         const categoryNames = dataCategories.map((category) => category.nome);
         setCategoryNames(categoryNames);
+  
+        const responseProducts = await fetch(
+          `http://127.0.0.1:8000/api/lojas/${dataStore.id}/produtos/`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (!responseProducts.ok) throw new Error(`Erro ao buscar produto`);
+        const dataProducts: ProductType[] = await responseProducts.json();
+        
+        setProducts(dataProducts);
+
+        const responseQuantidadeLikes = await fetch(
+          `http://127.0.0.1:8000/api/lojas/${dataStore.id}/favoritas/`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (!responseQuantidadeLikes.ok) throw new Error(`Erro ao buscar produto`);
+        const dataLikes = await responseQuantidadeLikes.json();
+        setQuantidadeFavoritos(dataLikes.length.toString());
+        
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       }
     }
-
-    fetchStoreProductAndCategories();
-  }, [token]);
+  
+    if (idLojista && token) {
+      fetchStoreProductAndCategories();
+    }
+  }, [token, idLojista]);
+  
 
   return (
-    <div className="bg-gray-200">
+    <div className="min-h-screen bg-gray-200">
       <div
         className="relative h-32 w-full bg-cover bg-center"
         style={{ backgroundImage: `url(${store?.banner})` }}
@@ -137,14 +163,14 @@ export function HomeLojista() {
         <div className="flex gap-4 p-4 whitespace-nowrap">
           <div className="min-w-[200px] bg-white rounded shadow p-5 flex flex-col gap-5">
             <div>
-              <h3 className="text-zinc-800">Visualização do Perfil</h3>
+              <h3 className="text-zinc-800">Quantidade de Gostei</h3>
               <p className="text-sm text-gray-500">(por semestre)</p>
             </div>
-            <h1 className="text-4xl text-green-600 text-end">1102</h1>
+            <h1 className="text-4xl text-green-600 text-end">{quantidadeDeFavoritos}</h1>
           </div>
-          <div className="min-w-[200px] bg-white rounded shadow p-5  flex flex-col gap-5">
+          <div className="min-w-[220px] bg-white rounded shadow p-5 flex flex-col gap-5">
             <div>
-              <h3>Quantidade de Interações</h3>
+              <h3 className="text-zinc-800">Quantidade de Interações</h3>
               <p className="text-sm text-gray-500">(por semestre)</p>
             </div>
             <h1 className="text-4xl text-red-600 text-end">842</h1>
@@ -152,7 +178,7 @@ export function HomeLojista() {
         </div>
       </div>
 
-      <div className="bg-white rounded shadow p-4">
+      <div className="bg-white rounded shadow p-6 pb-28">
         <div className=" text-xl font-semibold border-b border-amber-600/25">
           <h2>Perfil do Público</h2>
           <Chart
@@ -166,7 +192,7 @@ export function HomeLojista() {
           />
         </div>
         <div>
-          <div className="">
+          <div className="my-5">
             <h3 className="text-xl font-semibold mb-3">Produtos mais vistos</h3>
             <div className="grid grid-cols-2 gap-4">
               {products.map((product) => (
@@ -174,8 +200,8 @@ export function HomeLojista() {
                   key={product.id}
                   id={product.id}
                   nome={product.nome}
-                  imagem={product.imagem}
-                  heart={false}
+                  imagem={`http://127.0.0.1:8000${product.imagem}`}
+                  esconderFavorito={true}             
                 />
               ))}
             </div>

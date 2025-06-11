@@ -58,7 +58,6 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
       ? "bg-amber-600 hover:border-4 hover:outline-amber-400 peer-checked:outline-4 peer-checked:outline-gray-700"
       : "bg-amber-900 hover:border-4 hover:outline-amber-400 peer-checked:outline-4 peer-checked:outline-gray-700";
   };
-  console.log(categoryImages["Moda Masculina"]);
 
   return (
     <div className="w-full my-4">
@@ -97,8 +96,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
                 {image && (
                   <img
                     src={
-                      categoryImages[value.nome] ||
-                      "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=500&auto=format&fit=crop"
+                      categoryImages[value.nome]
                     }
                     alt={value.nome}
                     className="w-11.5  object-cover"

@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CardProduct } from "../../components/CardProduct";
 import { SearchInput } from "../../components/SearchInput";
-import { FaArrowLeft, FaStar } from "react-icons/fa6";
+import { FaArrowLeft } from "react-icons/fa6";
 import { Menu } from "../../components/Menu";
-import { HeartButton } from "../../components/HeartButton";
+import { CardStore } from "../../components/CardStore";
 
 type ProductType = {
   id: string;
   nome: string;
-  categoria: number;
+  categorias: number[];
   imagem: string;
+  favoritado: boolean;
 };
 
 type StoreType = {
@@ -28,27 +29,28 @@ type CategoryType = {
   nome: string;
 };
 
-const corMap: Record<string, string> = {
-  1: "bg-red-500",
-  2: "bg-yellow-500",
-  3: "bg-green-500",
-  4: "bg-purple-500",
-  5: "bg-brown-500",
-  6: "bg-violet-500",
-  7: "bg-orange-500",
-  8: "bg-pink-500",
+const corMap: Record<number, string> = {
+  1: "bg-red-500",      
+  2: "bg-yellow-500",   
+  3: "bg-green-500",    
+  4: "bg-purple-500",   
+  5: "bg-amber-800",
+  6: "bg-violet-400",   
+  7: "bg-orange-500",   
+  8: "bg-pink-500",     
+  9: "bg-blue-500",     
+  10: "bg-white",       
 };
 
 export function SearchResults() {
   const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-  const idCliente = user.idCliente;
   const navigate = useNavigate();
   const { searchTerm } = useParams<{ searchTerm: string }>();
   const [products, setProducts] = useState<ProductType[]>([]);
   const [stores, setStores] = useState<StoreType[]>([]);
   const [categories, setCategories] = useState<Record<number, string>>({});
+  
   const [isLoading, setIsLoading] = useState(true);
   const query = searchTerm || "";
 
@@ -74,15 +76,13 @@ export function SearchResults() {
 
         setProducts(data.produtos || []);
         setStores(data.lojas || []);
-        console.log("Produtos:", data.produtos);
-        console.log("Lojas:", data.lojas);
 
         const allCategoryIds = [
           ...new Set([
-            ...data.produtos.map((p: ProductType) => p.categoria),
+            ...data.produtos.flatMap((p: ProductType) => p.categorias),
             ...data.lojas.flatMap((l: StoreType) => l.categorias),
           ]),
-        ];
+        ];        
 
         const categoryPromises = allCategoryIds.map(async (id: number) => {
           const response = await fetch(
@@ -96,7 +96,7 @@ export function SearchResults() {
             }
           );
           if (!response.ok) throw new Error(`Failed to fetch category ${id}`);
-          const categoryData: CategoryType[] = await response.json();          
+          const categoryData: CategoryType[] = await response.json();
           return { id, name: categoryData?.nome || "Desconhecida" };
         });
 
@@ -129,7 +129,7 @@ export function SearchResults() {
             <FaArrowLeft className="w-5 h-5 text-amber-600" />
           </button>
           <div className="flex-1">
-            <SearchInput defaultValue={query} />
+            <SearchInput />
           </div>
         </div>
       </header>
@@ -139,76 +139,50 @@ export function SearchResults() {
           <div className="flex justify-center items-center h-64">
             <p className="text-gray-500">Buscando produtos...</p>
           </div>
-        ) : products.length > 0 ? (
+        ) : products.length > 0 || stores.length > 0 ? (
           <>
             <h1 className="text-xl font-semibold px-4 py-3 text-zinc-800">
               Resultados para "{query}"
             </h1>
-            <div className="grid grid-cols-2 gap-4 px-4">
-              {products.map((product) => (
-                <CardProduct
-                  key={product.id}
-                  id={product.id}
-                  nome={product.nome}
-                  categoria={
-                    categories[product.categoria] || "Categoria desconhecida"
-                  }
-                  imagem={product.imagem}
-                  heart
-                />
-              ))}
-            </div>
-          </>
-        ) : stores.length > 0 ? (
-          <>
-            <h1 className="text-xl font-semibold px-4 py-3 text-zinc-800">
-              Lojas encontradas para "{query}"
-            </h1>
-            {stores.slice(0, 3).map((store) => (
-              <Link
-                key={store.id}
-                to={`/store/${store.id}`}
-                className="py-2 px-4 flex items-center justify-between"
-              >
-                <div className="mr-5">
-                  <img
-                    src={store.logo}
-                    alt="Imagem de perfil"
-                    className="w-20 h-20 rounded-[5px]"
-                  />
-                </div>
-                <div className="flex-1 border-b border-amber-600/25 py-2">
-                  <div className="flex justify-between items-center">
-                    <p className="text-lg font-semibold">{store.nome}</p>
-                    <HeartButton
-                      idCliente={idCliente}
-                      id={store.id}
-                      tipo="Loja"
+
+            {products.length > 0 && (
+              <>
+                <h2 className="text-lg font-semibold px-4 text-zinc-800">
+                  Produtos
+                </h2>
+                <div className="grid grid-cols-2 gap-4 px-4">
+                  {products.map((product) => (
+                    <CardProduct
+                      key={product.id}
+                      id={product.id}
+                      nome={product.nome}
+                      categoria={
+                        categories[product.categorias[0]] ||
+                        "Categoria desconhecida"
+                      }
+                      imagem={product.imagem}
+                      favoritado={product.favoritado}
                     />
-                  </div>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <div
-                        className={`w-3 h-3 rounded-full ${
-                          corMap[store.setor] || "bg-gray-400"
-                        }`}
-                      />
-                      <span>
-                        Setor {store.setor} |{" "}
-                        {store.categorias
-                          .map((id) => categories[id] || "Desconhecida")
-                          .join(", ")}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-500">{store.localizacao}</p>
-                    <div className="flex items-center gap-1 text-sm text-amber-600">
-                      <FaStar className="text-md" />
-                      <span className="text-zinc-800">{store.nota_media ?? 5}</span>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              </Link>
-            ))}
+              </>
+            )}
+
+            {stores.length > 0 && (
+              <>
+                <h2 className="text-lg font-semibold px-4 pt-6 text-zinc-800">
+                  Lojas
+                </h2>
+                {stores.slice(0, 3).map((store) => (
+                  <CardStore
+                    key={store.id}
+                    store={store}
+                    categories={categories}
+                    corMap={corMap}
+                  />
+                ))}
+              </>
+            )}
           </>
         ) : (
           <div className="flex flex-col items-center justify-center h-64 text-center px-4">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CustomSelect } from "../../components/CustomSelect";
 import logo from "../../../public/logo.png";
 
@@ -19,13 +19,11 @@ type Option = {
 
 export function CategoryPreferences() {
   const token = localStorage.getItem("token");
-  const { id: userId } = useParams();
   const navigate = useNavigate();
 
-  const [selectedCategories, setSelectedCategories] = useState<CategoryType[]>(
-    []
-  );
+  const [selectedCategories, setSelectedCategories] = useState<CategoryType[]>([]);
   const [categories, setCategories] = useState<CategoryType[]>([]);
+  const [profile, setProfile] = useState<UserType | null>(null);
 
   useEffect(() => {
     async function loadData() {
@@ -33,18 +31,33 @@ export function CategoryPreferences() {
         const response = await fetch("http://127.0.0.1:8000/api/categorias/", {
           method: "GET",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
-        const data: { results: CategoryType[] } = await response.json();
-        if (response.ok && Array.isArray(data.results)) {
-          setCategories(data.results);
+
+        const data: CategoryType[] = await response.json();
+        if (response.ok && Array.isArray(data)) {
+          setCategories(data);
         } else {
-          console.error("Erro na resposta da API:", data);
+          console.error("Erro na resposta da API de categorias:", data);
+        }
+
+        const responseProfile = await fetch("http://127.0.0.1:8000/api/meu-perfil/", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const dataProfile = await responseProfile.json();
+
+        if (responseProfile.ok && dataProfile.cliente && dataProfile.cliente.id) {
+          setProfile({ id: dataProfile.cliente.id });
+        } else {
+          console.error("Erro na resposta da API de perfil:", dataProfile);
         }
       } catch (error) {
-        console.error("Erro ao buscar categorias:", error);
+        console.error("Erro ao buscar dados:", error);
       }
     }
 
@@ -52,32 +65,34 @@ export function CategoryPreferences() {
   }, [token]);
 
   const handleRegisterCategoryOfUser = async () => {
-    navigate("/");
-    // if (!userId) {
-    //   console.error("ID do usuário não encontrado.");
-    //   return;
-    // }
+    if (!profile?.id) {
+      console.error("ID do usuário não encontrado.");
+      return;
+    }
 
-    // const categoryIds = selectedCategories.map((c) => c.id);
+    const categoryIds = selectedCategories.map((c) => c.id);
 
-    // try {
-    //   const res = await fetch("http://127.0.0.1:8000/api/cliente/", {
-    //     method: "PUT",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //       userId,
-    //       categoryIds,
-    //     }),
-    //   });
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/clientes/${profile.id}/`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          categorias_preferidas: categoryIds,
+        }),
+      });
 
-    //   if (res.ok) {
-    //     console.log("Categorias registradas com sucesso!");
-    //   } else {
-    //     console.error("Erro ao registrar categorias.");
-    //   }
-    // } catch (err) {
-    //   console.error("Erro ao enviar categorias:", err);
-    // }
+      if (res.ok) {
+        navigate("/login");
+      } else {
+        const errData = await res.json();
+        console.error("Erro ao registrar categorias:", errData);
+      }
+    } catch (err) {
+      console.error("Erro ao enviar categorias:", err);
+    }
   };
 
   return (

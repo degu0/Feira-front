@@ -44,7 +44,6 @@ export function DirectionsModal({
         }
 
         const data: MapaType = await response.json();
-        console.log(data);
 
         setMapaImage(data.mapa);
       } catch (error) {

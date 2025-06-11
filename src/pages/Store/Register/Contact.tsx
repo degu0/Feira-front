@@ -15,32 +15,25 @@ export function Contact() {
   const websiteRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // Máscara para WhatsApp (telefone brasileiro)
     if (whatsappRef.current) {
       IMask(whatsappRef.current, {
         mask: "(00) 00000-0000",
       });
     }
-
-    // Máscara para Instagram (obrigatório @ no início)
     if (instagramRef.current) {
       IMask(instagramRef.current, {
         mask: /^[a-zA-Z0-9_.]{0,29}$/,
         prepare: function (str) {
-          // Garante que o valor começa com '@'
           if (!str.startsWith("@")) {
             return "@" + str.replace(/^@+/, "");
           }
           return str;
         },
         commit: function (value, masked) {
-          // Remove espaços extras
           masked._value = value.trim();
         },
       });
     }
-
-    // Máscara simples para Website (URL)
     if (websiteRef.current) {
       IMask(websiteRef.current, {
         mask: [
@@ -69,7 +62,6 @@ export function Contact() {
             lazy: false,
           },
         ],
-        // Você pode ajustar o padrão da máscara de URL para algo mais flexível
       });
     }
   }, []);

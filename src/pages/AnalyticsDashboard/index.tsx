@@ -34,13 +34,13 @@ const categoriasMaisAcessadasData = [
 export function AnalyticsDashboard() {
   const token = localStorage.getItem("token");
   const [store, setStore] = useState<StoreType | null>(null);
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const idLojista = user.id;
+  const storeLocal = JSON.parse(localStorage.getItem("store") || "{}");
+  const idStore = storeLocal.id;
 
   useEffect(() => {
     async function fetchStore() {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/api/lojas/2/`, {
+        const response = await fetch(`http://127.0.0.1:8000/api/lojas/${idStore}/`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

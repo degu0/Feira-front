@@ -12,6 +12,8 @@ type CategoryType = {
 export function RegisterProduct() {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const store = JSON.parse(localStorage.getItem("store") || "{}");
+  const idStore = store.id;
 
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [nome, setNome] = useState("");
@@ -19,7 +21,7 @@ export function RegisterProduct() {
   const [composicao, setComposicao] = useState("");
   const [cor, setCor] = useState("");
   const [category, setCategory] = useState("");
-  const [loja, setLoja] = useState("2");
+  const [loja, setLoja] = useState(`${idStore}`);
   const [imagem, setImagem] = useState<File | null>(null);
 
   const optionColors = [
@@ -47,10 +49,10 @@ export function RegisterProduct() {
           },
         });
 
-        const data: { results: CategoryType[] } = await response.json();
+        const data: CategoryType[] = await response.json();
 
-        if (Array.isArray(data.results)) {
-          setCategories(data.results);
+        if (Array.isArray(data)) {
+          setCategories(data);
         } else {
           console.error("Resposta inválida da API:", data);
         }
@@ -152,18 +154,23 @@ export function RegisterProduct() {
 
         <div className="flex flex-col gap-2 border-b border-amber-600 pb-5">
           <h2 className="text-xl font-semibold">Adicionar imagem</h2>
-          <div className="relative w-24 h-24">
-            <input
-              id="imagem"
-              type="file"
-              onChange={(e) =>
-                setImagem(e.target.files ? e.target.files[0] : null)
-              }
-              className="absolute inset-0 opacity-0 cursor-pointer z-10"
-            />
-            <div className="w-full h-full bg-zinc-300 rounded-lg flex items-center justify-center hover:bg-orange-200 transition-colors">
-              <FiCamera className="text-white text-5xl" />
+
+          <div className="flex items-center gap-4">
+            <div className="relative w-24 h-24">
+              <input
+                id="imagem"
+                type="file"
+                accept="image/*"
+                onChange={(e) => setImagem(e.target.files?.[0] || null)}
+                className="absolute inset-0 opacity-0 cursor-pointer z-10"
+              />
+              <div className="w-full h-full bg-zinc-300 rounded-lg flex items-center justify-center hover:bg-orange-200 transition-colors">
+                <FiCamera className="text-white text-5xl" />
+              </div>
             </div>
+            {imagem && (
+              <span className="text-zinc-700 text-sm">{imagem.name}</span>
+            )}
           </div>
         </div>
         <div className="flex flex-col gap-3">

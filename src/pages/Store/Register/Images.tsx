@@ -39,10 +39,11 @@ export function Images() {
         const errorData = await response.json();
         console.error("Erro ao enviar dados:", errorData);
         return;
+      }else {
+        localStorage.removeItem("store");
+      
+        navigate("/login");
       }
-      localStorage.removeItem("store");
-
-      navigate("/login");
     } catch (error) {
       console.error("Erro na requisição:", error);
     }
@@ -55,38 +56,44 @@ export function Images() {
         <h2 className="font-semibold text-lg mb-4">Informações da loja</h2>
 
         <div className="mb-4">
-          <label htmlFor="logo" className="font-medium text-zinc-800 mb-1 block">
+          <label htmlFor="logo" className="font-medium text-zinc-800 block mb-1">
             Logo da Loja
           </label>
-          <div className="relative w-24 h-24">
-            <input
-              id="logo"
-              type="file"
-              accept="image/*"
-              onChange={(e) => setLogoFile(e.target.files?.[0] || null)}
-              className="absolute inset-0 opacity-0 cursor-pointer z-10"
-            />
-            <div className="w-full h-full bg-zinc-300 rounded-lg flex items-center justify-center hover:bg-orange-200 transition-colors">
-              <FiCamera className="text-white text-5xl" />
+          <div className="flex items-center gap-4">
+            <div className="relative w-24 h-24">
+              <input
+                id="logo"
+                type="file"
+                accept="image/*"
+                onChange={(e) => setLogoFile(e.target.files?.[0] || null)}
+                className="absolute inset-0 opacity-0 cursor-pointer z-10"
+              />
+              <div className="w-full h-full bg-zinc-300 rounded-lg flex items-center justify-center hover:bg-orange-200 transition-colors">
+                <FiCamera className="text-white text-5xl" />
+              </div>
             </div>
+            <span className="text-sm text-zinc-700">{logoFile?.name || "Nenhum arquivo"}</span>
           </div>
         </div>
 
-        <div className="mb-6">
-          <label htmlFor="capa" className="font-medium text-zinc-800 mb-1 block">
+        <div>
+          <label htmlFor="capa" className="font-medium text-zinc-800 block mb-1">
             Foto da Capa de Perfil
           </label>
-          <div className="relative w-24 h-24">
-            <input
-              id="capa"
-              type="file"
-              accept="image/*"
-              onChange={(e) => setCapaFile(e.target.files?.[0] || null)}
-              className="absolute inset-0 opacity-0 cursor-pointer z-10"
-            />
-            <div className="w-full h-full bg-zinc-300 rounded-lg flex items-center justify-center hover:bg-orange-200 transition-colors">
-              <FiCamera className="text-white text-5xl" />
+          <div className="flex items-center gap-4">
+            <div className="relative w-24 h-24">
+              <input
+                id="capa"
+                type="file"
+                accept="image/*"
+                onChange={(e) => setCapaFile(e.target.files?.[0] || null)}
+                className="absolute inset-0 opacity-0 cursor-pointer z-10"
+              />
+              <div className="w-full h-full bg-zinc-300 rounded-lg flex items-center justify-center hover:bg-orange-200 transition-colors">
+                <FiCamera className="text-white text-5xl" />
+              </div>
             </div>
+            <span className="text-sm text-zinc-700">{capaFile?.name || "Nenhum arquivo"}</span>
           </div>
         </div>
 

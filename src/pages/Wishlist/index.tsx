@@ -4,9 +4,6 @@ import { Menu } from "../../components/Menu";
 import { Header } from "../../components/Header";
 import StoreImage from "../../../public/loja.jpg";
 import { Link } from "react-router-dom";
-import jeans from "../../../public/Jeans.jpg";
-
-// ... importações mantidas
 
 type FavoritesStoreType = {
   id: string;
@@ -41,19 +38,21 @@ type CategoryNameType = {
 export function Wishlist() {
   const token = localStorage.getItem("token");
   const storedUserJSON = localStorage.getItem("user");
+  const userId = storedUserJSON ? JSON.parse(storedUserJSON)?.id : null;
 
   const [mostrarProdutos, setMostrarProdutos] = useState(false);
   const [lojasFavoritas, setLojasFavoritas] = useState<StoreType[]>([]);
   const [produtosFavoritos, setProdutosFavoritos] = useState<ProductType[]>([]);
   const [categories, setCategories] = useState<Record<number, string>>({});
 
+
   useEffect(() => {
     async function loadData() {
       try {
         if (!storedUserJSON) return;
-
+        
         const responseFavoritosLojas = await fetch(
-          `http://127.0.0.1:8000/api/lojas_favoritas/`,
+          `http://127.0.0.1:8000/api/clientes/${userId}/lojas_favoritas/`,
           {
             method: "GET",
             headers: {
@@ -62,12 +61,13 @@ export function Wishlist() {
             },
           }
         );
-        const dataFavoritosLoja: { results: FavoritesStoreType[] } =
+        
+        const dataFavoritosLoja: FavoritesStoreType[]  =
           await responseFavoritosLojas.json();
-
+          
         const lojas = await Promise.all(
-          dataFavoritosLoja.results.map((data) =>
-            fetch(`http://127.0.0.1:8000/api/lojas/${data.loja}/`, {
+          dataFavoritosLoja.map((data) =>
+            fetch(`http://127.0.0.1:8000/api/lojas/${data.id}/`, {
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
@@ -82,11 +82,10 @@ export function Wishlist() {
         );
 
         setLojasFavoritas(lojasUnicas);
-        console.log(lojasUnicas);
         
 
         const responseFavoritosProdutos = await fetch(
-          `http://127.0.0.1:8000/api/produtos_favoritos/`,
+          `http://127.0.0.1:8000/api/clientes/${userId}/produtos_favoritos/`,
           {
             method: "GET",
             headers: {
@@ -95,12 +94,12 @@ export function Wishlist() {
             },
           }
         );
-        const dataFavoritosProdutos: { results: FavoritesProductType[] } =
+        const dataFavoritosProdutos: FavoritesProductType[] =
           await responseFavoritosProdutos.json();
 
         const produtos = await Promise.all(
-          dataFavoritosProdutos.results.map((data) =>
-            fetch(`http://127.0.0.1:8000/api/produtos/${data.produto}/`, {
+          dataFavoritosProdutos.map((data) =>
+            fetch(`http://127.0.0.1:8000/api/produtos/${data.id}/`, {
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
@@ -148,7 +147,7 @@ export function Wishlist() {
     }
 
     loadData();
-  }, [storedUserJSON, token]);
+  }, [storedUserJSON, token, userId]);
 
   return (
     <div className="bg-gray-100 min-h-screen h-full flex flex-col justify-between">
@@ -205,10 +204,6 @@ export function Wishlist() {
                       {loja?.nota_media ?? "5.0"}
                     </span>
                   </div>
-                  <button className="text-amber-600/50 text-xs flex items-center gap-1 mt-1">
-                    <FaTrashAlt className="text-xs" />
-                    Remover dos favoritos
-                  </button>
                 </div>
               </Link>
             ))}
@@ -223,16 +218,12 @@ export function Wishlist() {
               >
                 <div
                   className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center bg-center bg-cover bg-no-repeat"
-                  style={{ backgroundImage: `url(${jeans})` }}
+                  style={{ backgroundImage: `url(${produto.imagem})` }}
                 />
                 <div className="h-20 flex-1 flex flex-col justify-between">
                   <h3 className="text-sm font-semibold text-gray-800">
                     {produto.nome}
                   </h3>
-                  <button className="text-amber-600/50 text-xs flex items-center gap-1 mt-1">
-                    <FaTrashAlt className="text-xs" />
-                    Remover dos favoritos
-                  </button>
                 </div>
               </Link>
             ))}

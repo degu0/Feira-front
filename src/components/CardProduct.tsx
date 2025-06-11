@@ -1,28 +1,27 @@
 import { NavLink } from "react-router-dom";
 import { HeartButton } from "./HeartButton";
-import jeans from "../../public/Jeans.jpg";
 
 type CardProductProps = {
   id: string;
   nome: string;
   categoria?: string;
-  // imagem: string;
-  heart: boolean;
+  imagem: string;
+  favoritado?: boolean;
+  esconderFavorito?: boolean;
 };
 
 export const CardProduct: React.FC<CardProductProps> = ({
   id,
   nome,
   categoria,
-  heart,
+  favoritado,
+  imagem,
+  esconderFavorito,
 }) => {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const idCliente = user.idCliente;
-
   return (
-    <NavLink to={`/product/${id}`} className="w-44 h-64 relative block">
+    <NavLink to={`/product/${id}`} className="w-44 h-64 relative z-0 block">
       <img
-        src={jeans}
+        src={imagem}
         alt={nome}
         className="w-44 h-44 absolute top-0 left-0 rounded-tl-[5px] rounded-tr-[5px] object-cover"
       />
@@ -33,16 +32,17 @@ export const CardProduct: React.FC<CardProductProps> = ({
         {nome}
       </div>
 
-      <div className="absolute top-[210px] left-3 text-gray-600 text-sm font-semibold leading-6">
+      <div className="absolute top-[225px] left-3 text-gray-600 text-sm font-semibold leading-6">
         {categoria}
       </div>
 
       <HeartButton
-        idCliente={idCliente}
         id={id}
-        jáFavoritado={heart}
+        favoritedInitially={favoritado}
         tipo="Produto"
+        hide={esconderFavorito}
       />
     </NavLink>
   );
 };
+

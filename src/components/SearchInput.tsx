@@ -9,7 +9,6 @@ function saveToSearchHistory(term: string) {
 export const SearchInput = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
-  const lastSearch = localStorage.getItem("lastSearch");
 
   const handleSearch = () => {
     const trimmed = query.trim();

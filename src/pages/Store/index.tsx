@@ -26,6 +26,7 @@ type ProductType = {
   id: string;
   nome: string;
   imagem: string;
+  favoritado: boolean
 };
 
 type CategoryNameType = { nome: string }[];
@@ -38,15 +39,17 @@ export function Store() {
   const [products, setProducts] = useState<ProductType[]>([]);
   const [categoryNames, setCategoryNames] = useState<string[]>([]);
 
-  const corMap: Record<string, string> = {
-    1: "bg-red-500",
-    2: "bg-yellow-500",
-    3: "bg-green-500",
-    4: "bg-purple-500",
-    5: "bg-brown-500",
-    6: "bg-violet-500",
-    7: "bg-orange-500",
-    8: "bg-pink-500",
+  const corMap: Record<number, string> = {
+    1: "bg-red-500",      
+    2: "bg-yellow-500",   
+    3: "bg-green-500",    
+    4: "bg-purple-500",   
+    5: "bg-amber-800",
+    6: "bg-violet-400",   
+    7: "bg-orange-500",   
+    8: "bg-pink-500",     
+    9: "bg-blue-500",     
+    10: "bg-white",       
   };
   
 
@@ -152,7 +155,7 @@ export function Store() {
               id={product.id}
               nome={product.nome}
               imagem={product.imagem}
-              heart
+              favoritado={product.favoritado}
             />
           ))}
         </div>

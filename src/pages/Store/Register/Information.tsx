@@ -47,9 +47,9 @@ export function Information() {
             Authorization: `Bearer ${token}`,
           },
         });
-        const data: { results: CategoryType[] } = await response.json();
-        if (response.ok && Array.isArray(data.results)) {
-          setCategories(data.results);
+        const data:  CategoryType[]  = await response.json();
+        if (response.ok && Array.isArray(data)) {
+          setCategories(data);
         } else {
           console.error("Erro na resposta da API:", data);
         }

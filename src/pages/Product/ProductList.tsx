@@ -3,7 +3,6 @@ import { Menu } from "../../components/Menu";
 import { IoIosSearch } from "react-icons/io";
 import { Link, NavLink } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
-import imagem from "../../../public/Jeans.jpg";
 
 type ProductType = {
   id: string;
@@ -13,6 +12,9 @@ type ProductType = {
 
 export function ProductList() {
   const token = localStorage.getItem("token");
+  const store = JSON.parse(localStorage.getItem("store") || "{}");
+  const idStore = store.id;
+
   const [products, setProducts] = useState<ProductType[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([]);
 
@@ -20,7 +22,7 @@ export function ProductList() {
     async function fetchProducts() {
       try {
         const response = await fetch(
-          `http://127.0.0.1:8000/api/lojas/2/produtos/`,
+          `http://127.0.0.1:8000/api/lojas/${idStore}/produtos/`,
           {
             method: "GET",
             headers: {
@@ -31,7 +33,7 @@ export function ProductList() {
         );
 
         const data: ProductType[] = await response.json();
-
+        
         if (Array.isArray(data)) {
           setProducts(data);
           setFilteredProducts(data);
@@ -44,7 +46,7 @@ export function ProductList() {
     }
 
     fetchProducts();
-  }, [token]);
+  }, [idStore, token]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -91,7 +93,7 @@ export function ProductList() {
                   className="py-2 px-4 flex items-center gap-4 border-b border-amber-600/25"
                 >
                   <img
-                    src={imagem}
+                    src={`http://127.0.0.1:8000${product.imagem}`}
                     alt="Imagem do produto"
                     className="w-20 h-20 rounded-md object-cover"
                   />

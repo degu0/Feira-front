@@ -16,16 +16,11 @@ export function Comments() {
   const handleAssesmentRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     
-
     const formData = new FormData();
     formData.append("cliente", String(idCliente));
     formData.append("loja", String(idStore));
     formData.append("comentario", comentario);
     formData.append("nota", nota);
-
-    formData.forEach((value, key) => {
-      console.log(`${key}:`, value);
-    });
 
     try {
       const response = await fetch(`http://127.0.0.1:8000/api/avaliacoes/`, {

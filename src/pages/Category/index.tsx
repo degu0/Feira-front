@@ -58,10 +58,10 @@ export function Category() {
           },
         });
         const data: CategoryType[] = await response.json();
-
+        
         if (response.ok) {
-          if (Array.isArray(data.results)) {
-            setCategory(data.results);
+          if (Array.isArray(data)) {
+            setCategory(data);
           } else {
             console.error("Resposta inválida da API:", data);
           }
@@ -73,7 +73,7 @@ export function Category() {
       }
     }
     loadData();
-  }, []);
+  }, [token]);
 
   const getColorClass = (index: number) => {
     return index % 2 === 0 ? "bg-amber-600" : "bg-amber-900";
@@ -97,7 +97,7 @@ export function Category() {
             >
               {cat.nome}
               <img
-                src={categoryImages[cat.nome] || "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=500&auto=format&fit=crop"}
+                src={categoryImages[cat.nome] || "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Pictogram_voting_imported_ballot.svg/1024px-Pictogram_voting_imported_ballot.svg.png"}
                 alt={cat.nome}
                 className="w-10 h-full object-cover"
                 loading="lazy"
