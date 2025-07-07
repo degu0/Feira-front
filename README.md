@@ -54,7 +54,7 @@ O projeto estará acessível em:
 
 ## 👤 Autores
 
-| Autor Principal                                                                           | Back-end / Big Data                                  |
+| Desenvolvedor Front-End                                                                        | Desenvolvedor Back-end                                  |
 | ----------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | <img src="https://avatars.githubusercontent.com/u/87346972?v=4" width="150" height="150"> | <img src="./public/184168795.jpg" width="150" height="150"> |
 | [Deyvid Gustavo](https://www.linkedin.com/in/deyvid-gustavo-0642a2235/)                   | [Davi Guilherme](https://github.com/Dabo-o/)                                       |
